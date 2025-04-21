@@ -7,9 +7,6 @@
 #include <string>
 #include <utility>
 
-void clearScreen();
-char getch();
-
 // Game constants
 const int MAP_WIDTH = 67;
 const int MAP_HEIGHT = 23;

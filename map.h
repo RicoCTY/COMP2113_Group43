@@ -4,6 +4,7 @@
 #define MAP_H
 
 #include "game.h"
+#include "terminal.h"
 
 // Map functions
 void initializeGameState(GameState& state, Player& player);

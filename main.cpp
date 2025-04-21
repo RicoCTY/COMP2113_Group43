@@ -1,6 +1,7 @@
 // main.cpp
 // Main game loop and entry point
 #include "game.h"
+#include "terminal.h"
 #include <iostream>
 
 using namespace std;
