@@ -1,7 +1,7 @@
 CXX = g++
 
 # Source files
-SRCS = main.cpp game.cpp player.cpp map.cpp
+SRCS = main.cpp game.cpp player.cpp map.cpp terminal.cpp
 OBJS = $(SRCS:.cpp=.o)
 EXEC = rush
 
