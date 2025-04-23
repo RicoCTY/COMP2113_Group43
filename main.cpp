@@ -13,6 +13,7 @@ int main() {
     cout << "DESCRIPTION:\n";
     cout << PLAYER << " - You (the player)\n";
     cout << WALL << " - Wall (can't pass)\n";
+    cout << COIN << " - Equipment (collect to upgrade)\n";
     
     cout << "Press any key to start...";
     getch();

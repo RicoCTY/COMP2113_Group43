@@ -24,6 +24,21 @@ void initializeGameState(GameState& state, Player& player) {
     player.x = MAP_WIDTH / 2;
     player.y = MAP_HEIGHT / 2;
     state.map[player.y][player.x] = PLAYER;
+
+    // Place coins
+    //state.coin.clear();
+    for (int i = 0; i < MAX_COINS; i++) {
+        int ex, ey;
+        do {
+            ex = rand() % (MAP_WIDTH - 2) + 1;
+            ey = rand() % (MAP_HEIGHT - 2) + 1;
+        } while (state.map[ey][ex] != EMPTY);
+        state.coin.push_back({ex, ey});
+        state.map[ey][ex] = COIN;
+    }
+
+    // Place zombies
+    // Place rocks
 }
 
 void drawGame(const GameState& state, const Player& player) {
@@ -40,6 +55,7 @@ void drawGame(const GameState& state, const Player& player) {
     // Draw stats
     cout << " | Health: " << "dummy";
     cout << " | Bullet: " << "dummy";
+    cout << " | Money: $" << player.money;
     
     cout << "\n\nControls: WASD to move, Q to quit" << endl;
 }

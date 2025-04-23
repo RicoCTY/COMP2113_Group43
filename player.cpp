@@ -7,6 +7,7 @@ Player initializePlayer() {
     Player p;
     p.x = MAP_WIDTH / 2;
     p.y = MAP_HEIGHT / 2;
+    p.money = 0;
     return p;
 }
 
@@ -25,6 +26,14 @@ void movePlayer(GameState& state, Player& player, char input) {
         char target = state.map[newY][newX];
         
         if (target == WALL) return;
+
+        if (target == COIN) {
+            auto it = find(state.coin.begin(), state.coin.end(), std::make_pair(newX, newY));
+            if (it != state.coin.end()) {
+                state.coin.erase(it);
+                player.money += 1;
+            }
+        }
         
         state.map[player.y][player.x] = EMPTY;
         player.x = newX;

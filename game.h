@@ -10,20 +10,24 @@
 // Game constants
 const int MAP_WIDTH = 67;
 const int MAP_HEIGHT = 23;
+const int MAX_COINS = 5;
 
 // Game symbols
 const char PLAYER = '@';
 const char WALL = '#';
 const char EMPTY = '.';
+const char COIN = '$';
 
 // Player structure
 struct Player {
     int x, y;
+    int money;
 };
 
 // Game state
 struct GameState {
     char map[MAP_HEIGHT][MAP_WIDTH];
+    std::vector<std::pair<int, int>> coin;
     bool gameOver;
 };
 
