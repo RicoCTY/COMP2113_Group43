@@ -14,7 +14,10 @@ int main() {
     cout << PLAYER << " - You (the player)\n";
     cout << WALL << " - Wall (can't pass)\n";
     cout << COIN << " - Equipment (collect to upgrade)\n";
-    
+    cout << ZOMBIE << " Enemy (Need to kill them)\n";
+    cout << STONE << " - obstacle (blocking your moves)\n";
+    cout << CITIZEN << " - CITIZENS (need to save them)\n";
+
     cout << "Press any key to start...";
     getch();
     

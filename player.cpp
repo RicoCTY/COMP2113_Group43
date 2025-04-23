@@ -41,3 +41,31 @@ void movePlayer(GameState& state, Player& player, char input) {
         state.map[player.y][player.x] = PLAYER;
     }
 }
+void moveZombies(GameState& state) {
+    for (auto& zombie : state.zombies) {
+        if (zombie.isAlive) {
+            
+            if (zombie.x < state.player.x) zombie.x++;
+            else if (zombie.x > state.player.x) zombie.x--;
+            if (zombie.y < state.player.y) zombie.y++;
+            else if (zombie.y > state.player.y) zombie.y--;
+
+            
+            if (zombie.x == state.player.x && zombie.y == state.player.y) {
+                zombie.isAlive = false; 
+                state.map[zombie.y][zombie.x] = EMPTY;
+                state.player.health--; 
+            }
+        }
+    }
+}
+
+void checkCitizenInteraction(GameState& state) {
+    for (auto& citizen : state.citizens) {
+        if (citizen.isAlive && citizen.x == state.player.x && citizen.y == state.player.y) {
+            citizen.isAlive = false; 
+            state.map[citizen.y][citizen.x] = EMPTY; 
+            break; 
+        }
+    }
+}

@@ -38,8 +38,45 @@ void initializeGameState(GameState& state, Player& player) {
     }
 
     // Place zombies
+    for (int i = 0; i < MAX_ZOMBIES; ++i) {
+        int ax, ay;
+        do {
+            ax = rand() % (MAP_WIDTH - 2) + 1;
+            ay = rand() % (MAP_HEIGHT - 2) + 1;
+        } while (state.map[ay][ax] != EMPTY); 
+        Zombie z;
+        z.isAlive = true;
+        state.zombies.push_back({ax, ay});
+        state.map[ay][ax] = ZOMBIE; 
+    }
+
     // Place rocks
+    for (int i = 0; i < MAX_STONES; ++i) {
+        int bx, by;
+        do {
+            bx = rand() % (MAP_WIDTH - 2) + 1;
+            by = rand() % (MAP_HEIGHT - 2) + 1;
+        } while (state.map[by][bx] != EMPTY);
+        Stone s;
+        s.isPlaced = true;
+        state.stones.push_back({bx, by});
+        state.map[by][bx] = STONE; 
+    }
+    // Spawn Citizens
+    for (int i = 0; i < MAX_CITIZENS; ++i) {
+        int cx, cy;
+        do {
+            cx = rand() % (MAP_WIDTH - 2) + 1;
+            cy = rand() % (MAP_HEIGHT - 2) + 1;
+        } while (state.map[cy][cx] != EMPTY);
+        Citizen c;
+        c.isAlive = true;
+        state.citizens.push_back({cx, cy});
+        state.map[cy][cx] = CITIZEN; 
+    }
 }
+
+
 
 void drawGame(const GameState& state, const Player& player) {
     clearScreen();
@@ -58,4 +95,4 @@ void drawGame(const GameState& state, const Player& player) {
     cout << " | Money: $" << player.money;
     
     cout << "\n\nControls: WASD to move, Q to quit" << endl;
-}
+    }
