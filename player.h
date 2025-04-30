@@ -8,5 +8,6 @@
 // Player functions
 Player initializePlayer();
 void movePlayer(GameState& state, Player& player, char input);
+void moveZombies(GameState& state, const Player& player);
 
 #endif
