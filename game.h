@@ -24,12 +24,14 @@ const char ZOMBIE = 'Z';
 struct Player {
     int x, y;
     int money;
+    int health;
 };
 
 // Game state
 struct GameState {
     char map[MAP_HEIGHT][MAP_WIDTH];
     std::vector<std::pair<int, int>> coin;
+    std::vector<std::pair<int, int>> zombie;
     bool gameOver;
 };
 

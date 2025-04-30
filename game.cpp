@@ -38,6 +38,7 @@ void gameLoop() {
             case 'q':
                 state.gameOver = true;
                 break;
+        
         }
         
     }

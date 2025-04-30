@@ -8,6 +8,7 @@ Player initializePlayer() {
     p.x = MAP_WIDTH / 2;
     p.y = MAP_HEIGHT / 2;
     p.money = 0;
+    p.health = 100;
     return p;
 }
 
@@ -32,6 +33,17 @@ void movePlayer(GameState& state, Player& player, char input) {
             if (it != state.coin.end()) {
                 state.coin.erase(it);
                 player.money += 1;
+            }
+        }
+
+        if (target == ZOMBIE) {
+            auto it = find(state.zombie.begin(), state.zombie.end(), std::make_pair(newX, newY));
+            if (it != state.zombie.end()) {
+                state.zombie.erase(it);
+                player.health -= 50;
+                if (player.health == 0) {
+                    state.gameOver = true;
+                }
             }
         }
         
