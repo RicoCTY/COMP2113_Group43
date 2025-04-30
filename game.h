@@ -11,12 +11,14 @@
 const int MAP_WIDTH = 67;
 const int MAP_HEIGHT = 23;
 const int MAX_COINS = 5;
+const int MAX_ZOMBIE = 10;
 
 // Game symbols
 const char PLAYER = '@';
 const char WALL = '#';
 const char EMPTY = '.';
 const char COIN = '$';
+const char ZOMBIE = 'Z';
 
 // Player structure
 struct Player {
