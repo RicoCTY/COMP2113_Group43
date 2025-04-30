@@ -26,19 +26,19 @@ void gameLoop() {
         if (kbhit()) {
             input = getch();
             input = tolower(input);
+            
+            switch (input) {
+                case 'w': case 'a': case 's': case 'd':
+                    movePlayer(state, player, input);
+                    // Zombies move after player moves
+                    moveZombies(state, player);
+                    break;
+                case 'q':
+                    state.gameOver = true;
+                    break;
+            }
         } else {
             usleep(100000);
-            continue;
         }
-        
-        switch (input) {
-            case 'w': case 'a': case 's': case 'd':
-                movePlayer(state, player, input);
-                break;
-            case 'q':
-                state.gameOver = true;
-                break;
-        }
-        
     }
 }

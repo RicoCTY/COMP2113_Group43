@@ -38,7 +38,17 @@ void initializeGameState(GameState& state, Player& player) {
     }
 
     // Place zombies
-    // Place rocks
+    //state.zombie.clear();
+    for (int i = 0; i < MAX_ZOMBIE; i++) {
+        int zx, zy;
+        do {
+            zx = rand() % (MAP_WIDTH - 2) + 1;
+            zy = rand() % (MAP_HEIGHT - 2) + 1;
+        } while (state.map[zy][zx] != EMPTY);
+        state.zombie.push_back({zx, zy});
+        state.map[zy][zx] = ZOMBIE;
+    }
+    
 }
 
 void drawGame(const GameState& state, const Player& player) {
@@ -53,7 +63,7 @@ void drawGame(const GameState& state, const Player& player) {
     }
     
     // Draw stats
-    cout << " | Health: " << "dummy";
+    cout << " | Health: " << player.health;
     cout << " | Bullet: " << "dummy";
     cout << " | Money: $" << player.money;
     
