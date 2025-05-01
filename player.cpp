@@ -21,6 +21,31 @@ void spawnRandomItem(GameState& state, bool isZombieKill) {
     int spawnChance = isZombieKill ? 3 : 10; // 1 in 3 vs 1 in 10 chance
     
     if ((rand() % spawnChance) == 0) {
+        // First check if there are any existing items of each type
+        bool hasHealth = false;
+        bool hasArmor = false;
+        bool hasRange = false;
+        
+        for (int y = 0; y < MAP_HEIGHT; y++) {
+            for (int x = 0; x < MAP_WIDTH; x++) {
+                if (state.map[y][x] == HEALTH_ITEM) hasHealth = true;
+                else if (state.map[y][x] == ARMOR_ITEM) hasArmor = true;
+                else if (state.map[y][x] == RANGE_ITEM) hasRange = true;
+            }
+        }
+        
+        // Determine which item types are available to spawn
+        vector<char> availableItems;
+        if (!hasHealth) availableItems.push_back(HEALTH_ITEM);
+        if (!hasArmor) availableItems.push_back(ARMOR_ITEM);
+        if (!hasRange) availableItems.push_back(RANGE_ITEM);
+        
+        // If no items are available to spawn, return
+        if (availableItems.empty()) return;
+        
+        // Choose a random item from available types
+        char itemType = availableItems[rand() % availableItems.size()];
+        
         int ex, ey;
         int attempts = 0;
         const int maxAttempts = 50;
@@ -33,13 +58,6 @@ void spawnRandomItem(GameState& state, bool isZombieKill) {
         } while (state.map[ey][ex] != EMPTY && attempts < maxAttempts);
         
         if (attempts < maxAttempts) {
-            char itemType;
-            int itemRand = rand() % 3;
-            switch (itemRand) {
-                case 0: itemType = HEALTH_ITEM; break;
-                case 1: itemType = ARMOR_ITEM; break;
-                case 2: itemType = RANGE_ITEM; break;
-            }
             state.map[ey][ex] = itemType;
         }
     }
