@@ -16,6 +16,35 @@ Player initializePlayer() {
     return p;
 }
 
+void spawnRandomItem(GameState& state, bool isZombieKill) {
+    // Higher chance to spawn if zombie was killed
+    int spawnChance = isZombieKill ? 3 : 10; // 1 in 3 vs 1 in 10 chance
+    
+    if ((rand() % spawnChance) == 0) {
+        int ex, ey;
+        int attempts = 0;
+        const int maxAttempts = 50;
+        
+        // Try to find an empty spot
+        do {
+            ex = rand() % (MAP_WIDTH - 2) + 1;
+            ey = rand() % (MAP_HEIGHT - 2) + 1;
+            attempts++;
+        } while (state.map[ey][ex] != EMPTY && attempts < maxAttempts);
+        
+        if (attempts < maxAttempts) {
+            char itemType;
+            int itemRand = rand() % 3;
+            switch (itemRand) {
+                case 0: itemType = HEALTH_ITEM; break;
+                case 1: itemType = ARMOR_ITEM; break;
+                case 2: itemType = RANGE_ITEM; break;
+            }
+            state.map[ey][ex] = itemType;
+        }
+    }
+}
+
 bool killZombiesInDirection(GameState& state, Player& player, char direction) {
     int dx = 0, dy = 0;
     bool killedAny = false;
@@ -48,6 +77,10 @@ bool killZombiesInDirection(GameState& state, Player& player, char direction) {
         else if (state.map[checkY][checkX] == WALL) {
             break; // Stop if player hit a wall
         }
+    }
+
+    if (killedAny) {
+        spawnRandomItem(state, true); // Higher chance since zombie was killed
     }
     
     return killedAny;
@@ -113,6 +146,11 @@ void movePlayer(GameState& state, Player& player, char input) {
                 player.x = newX;
                 player.y = newY;
                 state.map[player.y][player.x] = PLAYER;
+
+                // Small chance to spawn item when moving
+                if ((rand() % 20) == 0) { // 1 in 20 chance
+                    spawnRandomItem(state, false);
+                }
             }
         }
     }
