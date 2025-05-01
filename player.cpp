@@ -9,11 +9,14 @@ Player initializePlayer() {
     p.y = MAP_HEIGHT / 2;
     p.money = 0;
     p.health = 100;
+    p.maxHealth = 100;
+    p.armor = 0;
+    p.maxArmor = 50;
+    p.attackRange = 3; // Default range
     return p;
 }
 
 bool killZombiesInDirection(GameState& state, Player& player, char direction) {
-    int range = 3;
     int dx = 0, dy = 0;
     bool killedAny = false;
     
@@ -25,7 +28,7 @@ bool killZombiesInDirection(GameState& state, Player& player, char direction) {
         default: return false;
     }
     
-    for (int i = 1; i <= range; i++) {
+    for (int i = 1; i <= player.attackRange; i++) {
         int checkX = player.x + (dx * i);
         int checkY = player.y + (dy * i);
         
@@ -38,9 +41,12 @@ bool killZombiesInDirection(GameState& state, Player& player, char direction) {
             if (it != state.zombie.end()) {
                 state.zombie.erase(it);
                 state.map[checkY][checkX] = EMPTY;
-                player.money += 5;
+                player.money += 20;
                 killedAny = true;
             }
+        }
+        else if (state.map[checkY][checkX] == WALL) {
+            break; // Stop if player hit a wall
         }
     }
     
@@ -67,6 +73,32 @@ void movePlayer(GameState& state, Player& player, char input) {
             char target = state.map[newY][newX];
             
             if (target == WALL) return;
+
+            // Handle store items
+            if (target == HEALTH_ITEM) {
+                if (player.money >= 10 && player.health < player.maxHealth) {
+                    player.money -= 10;
+                    player.health = min(player.health + 10, player.maxHealth);
+                    state.map[newY][newX] = EMPTY;
+                }
+                return;
+            }
+            if (target == ARMOR_ITEM) {
+                if (player.money >= 15 && player.armor < player.maxArmor) {
+                    player.money -= 15;
+                    player.armor = min(player.armor + 10, player.maxArmor);
+                    state.map[newY][newX] = EMPTY;
+                }
+                return;
+            }
+            if (target == RANGE_ITEM) {
+                if (player.money >= 20 && player.attackRange < 8) {
+                    player.money -= 20;
+                    player.attackRange++;
+                    state.map[newY][newX] = EMPTY;
+                }
+                return;
+            }
 
             if (target == COIN) {
                 auto it = find(state.coin.begin(), state.coin.end(), std::make_pair(newX, newY));

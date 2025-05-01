@@ -21,12 +21,22 @@ const char WALL = '#';
 const char EMPTY = ' ';
 const char COIN = '$';
 const char ZOMBIE = 'Z';
+const char BLOCK = '=';
+
+const char HEALTH_ITEM = 'H';
+const char ARMOR_ITEM = 'A';
+const char RANGE_ITEM = 'R';
 
 // Player structure
 struct Player {
     int x, y;
     int money;
     int health;
+    int armor;
+    int maxHealth;
+    int maxArmor;
+    int attackRange;
+
 };
 
 // Game state
