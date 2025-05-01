@@ -57,14 +57,17 @@ bool killZombiesInDirection(GameState& state, Player& player, char direction) {
         default: return false;
     }
     
+    // Check each tile in range for zombies
     for (int i = 1; i <= player.attackRange; i++) {
         int checkX = player.x + (dx * i);
         int checkY = player.y + (dy * i);
         
+        // Skip if out of bounds
         if (checkX < 0 || checkX >= MAP_WIDTH || checkY < 0 || checkY >= MAP_HEIGHT) {
             continue;
         }
         
+        // If we find a zombie, kill it and stop checking further
         if (state.map[checkY][checkX] == ZOMBIE) {
             auto it = find(state.zombie.begin(), state.zombie.end(), make_pair(checkX, checkY));
             if (it != state.zombie.end()) {
@@ -72,10 +75,11 @@ bool killZombiesInDirection(GameState& state, Player& player, char direction) {
                 state.map[checkY][checkX] = EMPTY;
                 player.money += 20;
                 killedAny = true;
+                break; // Stop after killing one zombie
             }
         }
         else if (state.map[checkY][checkX] == WALL) {
-            break; // Stop if player hit a wall
+            break; // Stop if we hit a wall
         }
     }
 
