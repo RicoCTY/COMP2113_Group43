@@ -2,6 +2,7 @@
 // Player implementation
 #include "player.h"
 #include <algorithm>
+#include <random>
 
 Player initializePlayer() {
     Player p;
@@ -200,49 +201,102 @@ void movePlayer(GameState& state, Player& player, char input) {
     }
 }
 
-void moveZombies(GameState& state, const Player& player) {
+void moveZombies(GameState& state, Player& player) {
+    // Create random number generator
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    
     for (auto& zombie : state.zombie) {
         int zx = zombie.first;
         int zy = zombie.second;
         
         // Calculate direction towards player
-        int dx = 0, dy = 0;
-        if (zx < player.x) dx = 1;
-        else if (zx > player.x) dx = -1;
+        int dx = player.x - zx;
+        int dy = player.y - zy;
         
-        if (zy < player.y) dy = 1;
-        else if (zy > player.y) dy = -1;
+        // Normalize directions (-1, 0, 1)
+        int dirX = (dx > 0) ? 1 : ((dx < 0) ? -1 : 0);
+        int dirY = (dy > 0) ? 1 : ((dy < 0) ? -1 : 0);
         
-        // Try to move in x direction first
-        int newX = zx + dx;
-        int newY = zy;
+        // Possible moves (prioritize moving toward player)
+        vector<pair<int, int>> possibleMoves;
         
-        // Check if x move is valid (don't allow moving onto player position)
-        if (newX > 0 && newX < MAP_WIDTH - 1 && newY > 0 && newY < MAP_HEIGHT - 1) {
-            char target = state.map[newY][newX];
-            if (target == EMPTY) {  // Only allow moving to empty spaces
-                // Move zombie
-                state.map[zy][zx] = EMPTY;
-                zx = newX;
-                state.map[zy][zx] = ZOMBIE;
-                zombie.first = zx;
-                continue;
+        // Always include the direction toward player
+        if (dirX != 0) possibleMoves.emplace_back(dirX, 0);
+        if (dirY != 0) possibleMoves.emplace_back(0, dirY);
+        
+        // Sometimes add random directions (25% chance for each)
+        std::uniform_int_distribution<> dis(0, 3);
+        if (dis(gen) == 0) possibleMoves.emplace_back(-1, 0);  // left
+        if (dis(gen) == 0) possibleMoves.emplace_back(1, 0);   // right
+        if (dis(gen) == 0) possibleMoves.emplace_back(0, -1);  // up
+        if (dis(gen) == 0) possibleMoves.emplace_back(0, 1);   // down
+        
+        // Shuffle possible moves using std::shuffle
+        std::shuffle(possibleMoves.begin(), possibleMoves.end(), gen);
+        
+        bool moved = false;
+        for (const auto& move : possibleMoves) {
+            int newX = zx + move.first;
+            int newY = zy + move.second;
+            
+            // Check boundaries and valid moves
+            if (newX > 0 && newX < MAP_WIDTH - 1 && 
+                newY > 0 && newY < MAP_HEIGHT - 1) {
+                
+                char target = state.map[newY][newX];
+                
+                // Allow moving to empty spaces or coins
+                if (target == EMPTY || target == COIN) {
+                    // Move zombie
+                    state.map[zy][zx] = EMPTY;
+                    zombie.first = newX;
+                    zombie.second = newY;
+                    state.map[newY][newX] = ZOMBIE;
+                    moved = true;
+                    break;
+                }
+                // Check if zombie is moving onto player
+                else if (newX == player.x && newY == player.y) {
+                    // Reduce player health (armor absorbs damage first)
+                    if (player.armor > 0) {
+                        player.armor -= 10;
+                        if (player.armor < 0) player.armor = 0;
+                    } else {
+                        player.health -= 10;
+                        if (player.health <= 0) {
+                            state.gameOver = true;
+                        }
+                    }
+                    moved = true;
+                    break;
+                }
             }
         }
-        
-        // If x move failed, try y direction
-        newX = zx;
-        newY = zy + dy;
-        
-        if (newX > 0 && newX < MAP_WIDTH - 1 && newY > 0 && newY < MAP_HEIGHT - 1) {
-            char target = state.map[newY][newX];
-            if (target == EMPTY) {  // Only allow moving to empty spaces
-                // Move zombie
-                state.map[zy][zx] = EMPTY;
-                zy = newY;
-                state.map[zy][zx] = ZOMBIE;
-                zombie.second = zy;
-                continue;
+    
+        // If zombie couldn't move toward player, try any valid move
+        if (!moved) {
+            vector<pair<int, int>> fallbackMoves = {{-1,0}, {1,0}, {0,-1}, {0,1}};
+            std::shuffle(fallbackMoves.begin(), fallbackMoves.end(), gen);
+            
+            for (const auto& move : fallbackMoves) {
+                int newX = zx + move.first;
+                int newY = zy + move.second;
+                
+                if (newX > 0 && newX < MAP_WIDTH - 1 && 
+                    newY > 0 && newY < MAP_HEIGHT - 1) {
+                    
+                    char target = state.map[newY][newX];
+                    if ((target == EMPTY || target == COIN) && 
+                        !(newX == player.x && newY == player.y)) {
+                        
+                        state.map[zy][zx] = EMPTY;
+                        zombie.first = newX;
+                        zombie.second = newY;
+                        state.map[newY][newX] = ZOMBIE;
+                        break;
+                    }
+                }
             }
         }
     }
