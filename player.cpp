@@ -42,10 +42,13 @@ void movePlayer(GameState& state, Player& player, char input) {
             auto it = find(state.zombie.begin(), state.zombie.end(), std::make_pair(newX, newY));
             if (it != state.zombie.end()) {
                 state.zombie.erase(it);
+                state.map[newY][newX] = EMPTY;  // Clear the zombie from the map
                 player.health -= 50;
                 if (player.health <= 0) {
                     state.gameOver = true;
                 }
+                // Don't move player into zombie's position, just take damage
+                return;
             }
         }
         
@@ -76,10 +79,10 @@ void moveZombies(GameState& state, const Player& player) {
         int newX = zx + dx;
         int newY = zy;
         
-        // Check if x move is valid
+        // Check if x move is valid (don't allow moving onto player position)
         if (newX > 0 && newX < MAP_WIDTH - 1 && newY > 0 && newY < MAP_HEIGHT - 1) {
             char target = state.map[newY][newX];
-            if (target == EMPTY || target == PLAYER) {
+            if (target == EMPTY) {  // Only allow moving to empty spaces
                 // Move zombie
                 state.map[zy][zx] = EMPTY;
                 zx = newX;
@@ -95,7 +98,7 @@ void moveZombies(GameState& state, const Player& player) {
         
         if (newX > 0 && newX < MAP_WIDTH - 1 && newY > 0 && newY < MAP_HEIGHT - 1) {
             char target = state.map[newY][newX];
-            if (target == EMPTY || target == PLAYER) {
+            if (target == EMPTY) {  // Only allow moving to empty spaces
                 // Move zombie
                 state.map[zy][zx] = EMPTY;
                 zy = newY;

@@ -7,16 +7,18 @@
 #include <string>
 #include <utility>
 
+using namespace std;
+
 // Game constants
 const int MAP_WIDTH = 67;
 const int MAP_HEIGHT = 23;
 const int MAX_COINS = 5;
-const int MAX_ZOMBIE = 10;
+const int MAX_ZOMBIE = 2;
 
 // Game symbols
 const char PLAYER = '@';
 const char WALL = '#';
-const char EMPTY = '.';
+const char EMPTY = ' ';
 const char COIN = '$';
 const char ZOMBIE = 'Z';
 
@@ -30,8 +32,8 @@ struct Player {
 // Game state
 struct GameState {
     char map[MAP_HEIGHT][MAP_WIDTH];
-    std::vector<std::pair<int, int>> coin;
-    std::vector<std::pair<int, int>> zombie;
+    vector<pair<int, int>> coin;
+    vector<pair<int, int>> zombie;
     bool gameOver;
 };
 
