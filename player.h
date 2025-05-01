@@ -9,5 +9,6 @@
 Player initializePlayer();
 void movePlayer(GameState& state, Player& player, char input);
 void moveZombies(GameState& state, const Player& player);
+bool killZombiesInDirection(GameState& state, Player& player, char direction);
 
 #endif

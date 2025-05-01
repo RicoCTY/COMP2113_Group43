@@ -12,52 +12,76 @@ Player initializePlayer() {
     return p;
 }
 
-void movePlayer(GameState& state, Player& player, char input) {
-    int newX = player.x;
-    int newY = player.y;
+bool killZombiesInDirection(GameState& state, Player& player, char direction) {
+    int range = 3;
+    int dx = 0, dy = 0;
+    bool killedAny = false;
     
-    switch (input) {
-        case 'w': newY--; break;
-        case 'a': newX--; break;
-        case 's': newY++; break;
-        case 'd': newX++; break;
+    switch (direction) {
+        case 'w': dy = -1; break; // Up
+        case 's': dy = 1; break;  // Down
+        case 'a': dx = -1; break; // Left
+        case 'd': dx = 1; break;  // Right
+        default: return false;
     }
     
-    if (newX >= 0 && newX < MAP_WIDTH && newY >= 0 && newY < MAP_HEIGHT) {
-        char target = state.map[newY][newX];
+    for (int i = 1; i <= range; i++) {
+        int checkX = player.x + (dx * i);
+        int checkY = player.y + (dy * i);
         
-        if (target == WALL) return;
-
-        if (target == COIN) {
-            auto it = find(state.coin.begin(), state.coin.end(), std::make_pair(newX, newY));
-            if (it != state.coin.end()) {
-                state.coin.erase(it);
-                player.money += 1;
-                // Don't set to EMPTY here - we'll handle that below
-            }
+        if (checkX < 0 || checkX >= MAP_WIDTH || checkY < 0 || checkY >= MAP_HEIGHT) {
+            continue;
         }
         
-        // Handle zombie collision
-        if (target == ZOMBIE) {
-            auto it = find(state.zombie.begin(), state.zombie.end(), std::make_pair(newX, newY));
+        if (state.map[checkY][checkX] == ZOMBIE) {
+            auto it = find(state.zombie.begin(), state.zombie.end(), make_pair(checkX, checkY));
             if (it != state.zombie.end()) {
                 state.zombie.erase(it);
-                state.map[newY][newX] = EMPTY;  // Clear the zombie from the map
-                player.health -= 50;
-                if (player.health <= 0) {
-                    state.gameOver = true;
-                }
-                // Don't move player into zombie's position, just take damage
-                return;
+                state.map[checkY][checkX] = EMPTY;
+                player.money += 5;
+                killedAny = true;
             }
         }
+    }
+    
+    return killedAny;
+}
+
+void movePlayer(GameState& state, Player& player, char input) {
+    // First try to kill zombies in the direction
+    bool killedZombies = killZombiesInDirection(state, player, input);
+    
+    // Only move if no zombies were killed
+    if (!killedZombies) {
+        int newX = player.x;
+        int newY = player.y;
         
-        // Only clear old position if moving to empty or coin
-        if (target == EMPTY || target == COIN) {
-            state.map[player.y][player.x] = EMPTY;
-            player.x = newX;
-            player.y = newY;
-            state.map[player.y][player.x] = PLAYER;
+        switch (input) {
+            case 'w': newY--; break;
+            case 'a': newX--; break;
+            case 's': newY++; break;
+            case 'd': newX++; break;
+        }
+        
+        if (newX >= 0 && newX < MAP_WIDTH && newY >= 0 && newY < MAP_HEIGHT) {
+            char target = state.map[newY][newX];
+            
+            if (target == WALL) return;
+
+            if (target == COIN) {
+                auto it = find(state.coin.begin(), state.coin.end(), std::make_pair(newX, newY));
+                if (it != state.coin.end()) {
+                    state.coin.erase(it);
+                    player.money += 1;
+                }
+            }
+            
+            if (target == EMPTY || target == COIN) {
+                state.map[player.y][player.x] = EMPTY;
+                player.x = newX;
+                player.y = newY;
+                state.map[player.y][player.x] = PLAYER;
+            }
         }
     }
 }
