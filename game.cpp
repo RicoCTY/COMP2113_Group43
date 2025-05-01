@@ -12,15 +12,39 @@
 
 using namespace std;
 
+Difficulty selectDifficulty() {
+    clearScreen();
+    cout << "Select difficulty:\n";
+    cout << "1. Easy (100HP, 50 armor, range 3)\n"; 
+    cout << "2. Normal (80HP, 30 armor, range 2)\n";
+    cout << "3. Hard (60HP, 0 armor, range 1)\n";
+    cout << "====================\n";
+    cout << "Enter choice (1-3): ";
+    
+    while(true) {
+        char input = getch();
+        if(input >= '1' && input <= '3') {
+            return static_cast<Difficulty>(input - '1');
+        }
+    }
+}
+
 void gameLoop() {
     srand(time(nullptr));
     
-    Player player = initializePlayer();
+    Difficulty difficulty = selectDifficulty();
+    Player player = initializePlayer(difficulty);
     GameState state;
     initializeGameState(state, player);
     
     while (!state.gameOver) {
         drawGame(state, player);
+
+        // Check if player won all waves
+        if (state.currentWave > MAX_WAVES) {
+            cout << "\n\nCONGRATULATIONS! You survived all waves!\n";
+            break;
+        }
         
         char input;
         if (kbhit()) {
@@ -40,5 +64,13 @@ void gameLoop() {
         } else {
             usleep(100000);
         }
+
+        if (player.health <= 0) {
+            state.gameOver = true;
+        }
+    }
+    
+    if (state.currentWave <= MAX_WAVES) {
+        cout << "\n\nGAME OVER! You survived until wave " << state.currentWave << "\n";
     }
 }

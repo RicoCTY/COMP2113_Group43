@@ -7,31 +7,55 @@
 #include <string>
 #include <utility>
 
+using namespace std;
+
+// Difficulty levels
+enum Difficulty {
+    EASY,
+    NORMAL,
+    HARD
+};
+
 // Game constants
 const int MAP_WIDTH = 67;
 const int MAP_HEIGHT = 23;
 const int MAX_COINS = 5;
-const int MAX_ZOMBIE = 10;
 
 // Game symbols
 const char PLAYER = '@';
 const char WALL = '#';
-const char EMPTY = '.';
+const char EMPTY = ' ';
 const char COIN = '$';
 const char ZOMBIE = 'Z';
+const char BLOCK = '=';
+
+const char HEALTH_ITEM = 'H';
+const char ARMOR_ITEM = 'A';
+const char RANGE_ITEM = 'R';
+
+const int MAX_WAVES = 10;
+const int INITIAL_ZOMBIES = 1;
+const int ZOMBIE_INCREMENT = 1;  // Each wave adds this many zombies
 
 // Player structure
 struct Player {
     int x, y;
     int money;
     int health;
+    int armor;
+    int maxHealth;
+    int maxArmor;
+    int attackRange;
+    Difficulty difficulty;
 };
 
 // Game state
 struct GameState {
     char map[MAP_HEIGHT][MAP_WIDTH];
-    std::vector<std::pair<int, int>> coin;
-    std::vector<std::pair<int, int>> zombie;
+    vector<pair<int, int>> coin;
+    vector<pair<int, int>> zombie;
+    int zombiesRemaining;
+    int currentWave;
     bool gameOver;
 };
 
