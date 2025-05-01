@@ -4,16 +4,37 @@
 #include <algorithm>
 #include <random>
 
-Player initializePlayer() {
+Player initializePlayer(Difficulty difficulty) {
     Player p;
     p.x = MAP_WIDTH / 2;
     p.y = MAP_HEIGHT / 2;
     p.money = 0;
-    p.health = 100;
-    p.maxHealth = 100;
-    p.armor = 0;
-    p.maxArmor = 50;
-    p.attackRange = 3; // Default range
+    p.difficulty = difficulty;
+    
+    switch(difficulty) {
+        case EASY:
+            p.health = 100;
+            p.maxHealth = 100;
+            p.armor = 20;
+            p.maxArmor = 50;
+            p.attackRange = 3;
+            break;
+        case NORMAL:
+            p.health = 80;
+            p.maxHealth = 80;
+            p.armor = 10;
+            p.maxArmor = 30;
+            p.attackRange = 2;
+            break;
+        case HARD:
+            p.health = 60;
+            p.maxHealth = 60;
+            p.armor = 0;
+            p.maxArmor = 0;
+            p.attackRange = 1;
+            break;
+    }
+    
     return p;
 }
 

@@ -6,7 +6,7 @@
 #include "game.h"
 
 // Player functions
-Player initializePlayer();
+Player initializePlayer(Difficulty difficulty);
 void movePlayer(GameState& state, Player& player, char input);
 void moveZombies(GameState& state, Player& player);
 bool killZombiesInDirection(GameState& state, Player& player, char direction);

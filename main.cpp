@@ -16,7 +16,7 @@ int main() {
     cout << COIN << " - Equipment (collect to upgrade)\n";
     cout << ZOMBIE << " - Zombie (kill them)\n";
     
-    cout << "Press any key to start...";
+    cout << "Press any key to continue...";
     getch();
     
     gameLoop();

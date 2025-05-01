@@ -25,6 +25,8 @@ void initializeGameState(GameState& state, Player& player) {
     // Place player in center
     player.x = MAP_WIDTH / 2;
     player.y = MAP_HEIGHT / 2;
+    // Ensure center is empty
+    state.map[player.y][player.x] = EMPTY;
     state.map[player.y][player.x] = PLAYER;
 
     // Place coins

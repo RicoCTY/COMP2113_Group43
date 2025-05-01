@@ -9,6 +9,13 @@
 
 using namespace std;
 
+// Difficulty levels
+enum Difficulty {
+    EASY,
+    NORMAL,
+    HARD
+};
+
 // Game constants
 const int MAP_WIDTH = 67;
 const int MAP_HEIGHT = 23;
@@ -39,7 +46,7 @@ struct Player {
     int maxHealth;
     int maxArmor;
     int attackRange;
-
+    Difficulty difficulty;
 };
 
 // Game state
