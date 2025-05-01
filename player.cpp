@@ -84,7 +84,29 @@ bool killZombiesInDirection(GameState& state, Player& player, char direction) {
     }
 
     if (killedAny) {
-        spawnRandomItem(state, true); // Higher chance since zombie was killed
+        state.zombiesRemaining--;  // Decrement remaining zombies
+        spawnRandomItem(state, true);
+        
+        // Check if wave is complete
+        if (state.zombiesRemaining <= 0) {
+            state.currentWave++;
+            if (state.currentWave <= MAX_WAVES) {
+                state.zombiesRemaining = INITIAL_ZOMBIES + (state.currentWave - 1) * ZOMBIE_INCREMENT;
+                // Spawn new wave of zombies
+                for (int i = 0; i < state.zombiesRemaining; i++) {
+                    int zx, zy;
+                    do {
+                        zx = rand() % (MAP_WIDTH - 2) + 1;
+                        zy = rand() % (MAP_HEIGHT - 2) + 1;
+                    } while (state.map[zy][zx] != EMPTY);
+                    state.zombie.push_back({zx, zy});
+                    state.map[zy][zx] = ZOMBIE;
+                }
+            } else {
+                // Player won all waves
+                state.gameOver = true;
+            }
+        }
     }
     
     return killedAny;

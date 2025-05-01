@@ -8,6 +8,8 @@ using namespace std;
 
 void initializeGameState(GameState& state, Player& player) {
     state.gameOver = false;
+    state.currentWave = 1;
+    state.zombiesRemaining = INITIAL_ZOMBIES + (state.currentWave - 1) * ZOMBIE_INCREMENT;
 
     // Clear map
     for (int y = 0; y < MAP_HEIGHT; y++) {
@@ -37,7 +39,7 @@ void initializeGameState(GameState& state, Player& player) {
     }
 
     // Place zombies
-    for (int i = 0; i < MAX_ZOMBIE; i++) {
+    for (int i = 0; i < state.zombiesRemaining; i++) {
         int zx, zy;
         do {
             zx = rand() % (MAP_WIDTH - 2) + 1;
@@ -64,6 +66,10 @@ void drawGame(const GameState& state, const Player& player) {
     cout << " | Armor: " << player.armor << "/" << player.maxArmor;
     cout << " | Range: " << player.attackRange;
     cout << " | Money: $" << player.money;
+
+    // Add wave information
+    cout << " | Wave: " << state.currentWave << "/" << MAX_WAVES;
+    cout << " | Zombies: " << state.zombiesRemaining;
     
     cout << "\n\nControls: WASD to move, Q to quit" << endl;
     cout << "\nStore items: H(Health $10) A(Armor $15) R(Range $20)";

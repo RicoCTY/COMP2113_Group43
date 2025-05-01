@@ -21,6 +21,12 @@ void gameLoop() {
     
     while (!state.gameOver) {
         drawGame(state, player);
+
+        // Check if player won all waves
+        if (state.currentWave > MAX_WAVES) {
+            cout << "\n\nCONGRATULATIONS! You survived all waves!\n";
+            break;
+        }
         
         char input;
         if (kbhit()) {
@@ -40,5 +46,9 @@ void gameLoop() {
         } else {
             usleep(100000);
         }
+    }
+
+    if (state.currentWave <= MAX_WAVES) {
+        cout << "\n\nGAME OVER! You survived until wave " << state.currentWave << "\n";
     }
 }
