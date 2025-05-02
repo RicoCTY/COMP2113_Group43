@@ -50,6 +50,56 @@ void initializeGameState(GameState& state, Player& player) {
         state.zombie.push_back({zx, zy});
         state.map[zy][zx] = ZOMBIE;
     }
+
+    const int WALL_LENGTH = 14;
+    const int NUM_WALLS = 5;
+    
+    for (int i = 0; i < NUM_WALLS; i++) {
+        bool placed = false;
+        int attempts = 0;
+        const int MAX_ATTEMPTS = 50;
+        
+        while (!placed && attempts < MAX_ATTEMPTS) {
+            attempts++;
+            
+            // Randomly choose horizontal or vertical
+            bool horizontal = (rand() % 2) == 0;
+            
+            // Get random starting position
+            int startX = rand() % (MAP_WIDTH - WALL_LENGTH - 2) + 1;
+            int startY = rand() % (MAP_HEIGHT - WALL_LENGTH - 2) + 1;
+            
+            // Check if we can place the wall here
+            if (canPlaceWall(state, startX, startY, WALL_LENGTH, horizontal)) {
+                // Place the wall
+                if (horizontal) {
+                    for (int x = startX; x < startX + WALL_LENGTH; x++) {
+                        state.map[startY][x] = WALL;
+                    }
+                } else { // vertical
+                    for (int y = startY; y < startY + WALL_LENGTH; y++) {
+                        state.map[y][startX] = WALL;
+                    }
+                }
+                placed = true;
+            }
+        }
+    }
+}
+
+bool canPlaceWall(const GameState& state, int x, int y, int length, bool horizontal) {
+    if (horizontal) {
+        if (x + length >= MAP_WIDTH - 1) return false;
+        for (int i = 0; i < length; i++) {
+            if (state.map[y][x + i] != EMPTY) return false;
+        }
+    } else { // vertical
+        if (y + length >= MAP_HEIGHT - 1) return false;
+        for (int i = 0; i < length; i++) {
+            if (state.map[y + i][x] != EMPTY) return false;
+        }
+    }
+    return true;
 }
 
 void drawGame(const GameState& state, const Player& player) {
