@@ -11,6 +11,7 @@ const char PLAYER_DOWN[] = "\\@/";
 const char PLAYER_LEFT[] = "<@";
 const char PLAYER_RIGHT[] = "@>";
 
+// Function to initialize the player
 Player initializePlayer(Difficulty difficulty) {
     Player p;
     p.x = MAP_WIDTH / 2;
@@ -46,7 +47,12 @@ Player initializePlayer(Difficulty difficulty) {
     return p;
 }
 
-void spawnRandomItem(GameState& state, bool isZombieKill) {
+void spawnRandomItem(GameState& state, Player& player, bool isZombieKill) {
+    // Don't spawn items in Hard difficulty
+    if (player.difficulty == HARD) {
+        return;
+    }
+    
     // Higher chance to spawn if zombie was killed
     int spawnChance = isZombieKill ? 3 : 10; // 1 in 3 vs 1 in 10 chance
     
@@ -122,7 +128,7 @@ void shootBullet(GameState& state, Player& player) {
             if (it != state.zombie.end()) {
                 state.zombie.erase(it);
                 state.map[bulletY][bulletX] = EMPTY;
-                player.money += 20;
+                player.money += 5;
                 state.zombiesRemaining--;
                 
                 // Check wave completion
@@ -142,7 +148,9 @@ void shootBullet(GameState& state, Player& player) {
                         }
                     }
                 }
-                spawnRandomItem(state, true);
+                if (player.difficulty != HARD) {
+                    spawnRandomItem(state, player, true);
+                }
             }
             break;
         }
@@ -230,9 +238,9 @@ void movePlayer(GameState& state, Player& player, char input) {
             player.y = newY;
             state.map[player.y][player.x] = PLAYER;
 
-            // Small chance to spawn item when moving
-            if ((rand() % 20) == 0) {
-                spawnRandomItem(state, false);
+            // Small chance to spawn item when moving (only if not Hard difficulty)
+            if (player.difficulty != HARD && (rand() % 20) == 0) {
+                spawnRandomItem(state, player, false);
             }
         }
     }

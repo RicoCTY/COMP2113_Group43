@@ -13,6 +13,7 @@
 
 using namespace std;
 
+// Function to show the title screen
 Difficulty selectDifficulty() {
     int selection = 1; // Default to Easy (option 1)
     char input;
@@ -62,6 +63,7 @@ Difficulty selectDifficulty() {
     }
 }
 
+// Function to show game over screen
 void showGameOverScreen(int wave) {
     clearScreen();
     cout << COLOR_RED << COLOR_BOLD;
@@ -73,10 +75,16 @@ void showGameOverScreen(int wave) {
     cout << " \\_____|\\__,_|_| |_| |_|\\___|  \\____/  \\_/ \\___|_|   \n\n";
     cout << COLOR_RESET;
     cout << COLOR_YELLOW << "You survived until wave " << wave << "\n\n" << COLOR_RESET;
-    cout << COLOR_CYAN << "Press any key to return to the main menu..." << COLOR_RESET;
-    getch();
+    cout << COLOR_CYAN << "Press ENTER to return to the main menu..." << COLOR_RESET;
+    
+    // Wait specifically for Enter key
+    char input;
+    do {
+        input = getch();
+    } while (input != '\n' && input != '\r');  // Wait for Enter key
 }
 
+// Function to show victory screen
 void showVictoryScreen() {
     clearScreen();
     cout << COLOR_GREEN << COLOR_BOLD;
@@ -88,10 +96,16 @@ void showVictoryScreen() {
     cout << "    |_|\\___/ \\__,_|   \\_/\\_/ |_|_| |_(_)\n\n";
     cout << COLOR_RESET;
     cout << COLOR_YELLOW << "CONGRATULATIONS! You survived all " << MAX_WAVES << " waves!\n\n" << COLOR_RESET;
-    cout << COLOR_CYAN << "Press any key to return to the main menu..." << COLOR_RESET;
-    getch();
+    cout << COLOR_CYAN << "Press ENTER to return to the main menu..." << COLOR_RESET;
+    
+    // Wait specifically for Enter key
+    char input;
+    do {
+        input = getch();
+    } while (input != '\n' && input != '\r');  // Wait for Enter key
 }
 
+// Function to initialize the game state
 void gameLoop() {
     srand(time(nullptr));
     
@@ -148,6 +162,7 @@ void gameLoop() {
     }
 }
 
+// Function to show quit confirmation dialog
 bool showQuitConfirmation(bool inGame) {
     int selection = 1; // Default to "Return to Main Menu"
     char input;
@@ -173,6 +188,7 @@ bool showQuitConfirmation(bool inGame) {
         
         input = getch();
         
+        // Only process valid inputs
         switch(input) {
             case '1':
                 selection = 1;

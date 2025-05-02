@@ -51,6 +51,7 @@ void initializeGameState(GameState& state, Player& player) {
         state.map[zy][zx] = ZOMBIE;
     }
 
+    // Place walls
     const int WALL_LENGTH = 14;
     const int NUM_WALLS = 5;
     
@@ -102,7 +103,9 @@ bool canPlaceWall(const GameState& state, int x, int y, int length, bool horizon
     return true;
 }
 
+
 void drawGame(const GameState& state, const Player& player) {
+    // Clear the screen
     clearScreen();
     
     for (int y = 0; y < MAP_HEIGHT; y++) {
@@ -128,6 +131,7 @@ void drawGame(const GameState& state, const Player& player) {
                 continue; // Skip adding space after player
             }
             
+            // Check for other game elements
             char c = state.map[y][x];
             switch(c) {
                 case WALL: cout << COLOR_WHITE << c << COLOR_RESET; break;
@@ -143,6 +147,7 @@ void drawGame(const GameState& state, const Player& player) {
         cout << endl;
     }
 
+    // Draw the status bar
     cout << COLOR_BOLD << COLOR_YELLOW << "\nMode: " << COLOR_RESET;
     switch(player.difficulty) {
         case EASY:
@@ -208,12 +213,16 @@ void drawGame(const GameState& state, const Player& player) {
     cout << "\n" << COLOR_YELLOW << "Controls: " << COLOR_RESET;
     cout << COLOR_GREEN << "WASD" << COLOR_RESET << " to move, ";
     cout << COLOR_GREEN << "E" << COLOR_RESET << " to shoot, ";
-    cout << COLOR_GREEN << "Q" << COLOR_RESET << " to quit\n";
+    cout << COLOR_GREEN << "Q" << COLOR_RESET << " to quit\n" << endl;
     
     cout << COLOR_YELLOW << "Item: " << COLOR_RESET;
-    cout << COLOR_BLUE << "H" << COLOR_RESET << "(Health $10) ";
-    cout << COLOR_MAGENTA << "A" << COLOR_RESET << "(Armor $15) ";
-    cout << COLOR_CYAN << "R" << COLOR_RESET << "(Range $20)\n";
-
+    if (player.difficulty != HARD) {
+        cout << COLOR_BLUE << "H" << COLOR_RESET << " (Health $10) ";
+        cout << COLOR_MAGENTA << "A" << COLOR_RESET << " (Armor $15) ";
+        cout << COLOR_CYAN << "R" << COLOR_RESET << " (Range $20)";
+    } else {
+        cout << COLOR_RED << "Items disabled in Hard mode";
+    }
+    cout << "\n";
 
 }

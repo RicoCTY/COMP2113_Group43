@@ -29,10 +29,12 @@ const char COIN = '$';
 const char ZOMBIE = 'Z';
 const char BLOCK = '=';
 
+// Item symbols
 const char HEALTH_ITEM = 'H';
 const char ARMOR_ITEM = 'A';
 const char RANGE_ITEM = 'R';
 
+// Game settings
 const int MAX_WAVES = 5;
 const int INITIAL_ZOMBIES = 2; // Initial number of zombies
 const int ZOMBIE_INCREMENT = 3;  // Each wave adds this many zombies

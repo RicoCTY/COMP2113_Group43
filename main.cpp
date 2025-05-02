@@ -28,7 +28,7 @@ void showTitleScreen() {
     cout << COLOR_CYAN << "DESCRIPTION:\n" << COLOR_RESET;
     cout << COLOR_GREEN << PLAYER << COLOR_RESET << " - You (the player)\n";
     cout << COLOR_WHITE << WALL << COLOR_RESET << " - Wall (can't pass)\n";
-    cout << COLOR_YELLOW << COIN << COLOR_RESET << " - Equipment (collect to upgrade)\n";
+    cout << COLOR_YELLOW << COIN << COLOR_RESET << " - Coin (collect to upgrade)\n";
     cout << COLOR_RED << ZOMBIE << COLOR_RESET << " - Zombie (kill them)\n";
     cout << COLOR_BLUE << HEALTH_ITEM << COLOR_RESET << " - Health upgrade ($10)\n";
     cout << COLOR_MAGENTA << ARMOR_ITEM << COLOR_RESET << " - Armor upgrade ($15)\n";
@@ -44,6 +44,7 @@ int main() {
         char input = getch();
         input = tolower(input);
         
+        // Check if the user wants to quit
         if (input == 'q') {
             bool shouldQuit = showQuitConfirmation(false);
             if (shouldQuit) {
