@@ -101,7 +101,7 @@ make clean
 
      - Main entry point (main.cpp)
 
-   Architecture:
+   #### Architecture: ####
    ```bash
        src/
        ├── Makefile       # For code compilation
