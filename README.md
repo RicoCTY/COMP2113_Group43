@@ -1,11 +1,11 @@
-# COMP2113_Group43 - Zombie Rush
+# COMP2113 Group43 - Zombie Rush
 
-![WhatsApp Image 2025-05-02 at 22 43 48_1f132676](https://github.com/user-attachments/assets/742e527f-63f5-40aa-8e77-18144c782c6b)
+![Game title screens](https://github.com/user-attachments/assets/742e527f-63f5-40aa-8e77-18144c782c6b)
 
 ## Team Members
- [Choi Tsz Yin](https://github.com/RicoCTY) (3036259176)
+[Choi Tsz Yin](https://github.com/RicoCTY) (3036259176)
  
- [Yau Tik Hang](https://github.com/YauTikHang) (3036262018)
+[Yau Tik Hang](https://github.com/YauTikHang) (3036262018)
 
 ## Description
 🧟 **Zombie Rush** is an intense 2D survival shooter game written in C++ where you must defend against waves of undead!
@@ -22,7 +22,7 @@
 
 ### Quick DEMO
 
-https://drive.google.com/file/d/1A7skSvggePRmOMAEJOeDP2SuS30qjcDD/view?usp=drivesdk
+https://drive.google.com/file/d/1A7skSvggePRmOMAEJOeDP2SuS30qjcDD/view?usp=drivesdk <==== Click me!
 
 ### Running the Program
 To compile and run the game:
