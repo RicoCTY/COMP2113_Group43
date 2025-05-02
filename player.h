@@ -5,10 +5,14 @@
 
 #include "game.h"
 
+void drawGame(const GameState& state, const Player& player);
+
 // Player functions
 Player initializePlayer(Difficulty difficulty);
+
 void movePlayer(GameState& state, Player& player, char input);
 void moveZombies(GameState& state, Player& player);
-bool killZombiesInDirection(GameState& state, Player& player, char direction);
+void spawnRandomItem(GameState& state, Player& player, bool isZombieKill);
+void shootBullet(GameState& state, Player& player);
 
 #endif

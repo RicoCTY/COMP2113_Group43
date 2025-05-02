@@ -9,26 +9,103 @@
 #include <ctime>
 #include <unistd.h>
 #include <algorithm>
+#include <chrono>
 
 using namespace std;
 
+// Function to show the title screen
 Difficulty selectDifficulty() {
-    clearScreen();
-    cout << "Select difficulty:\n";
-    cout << "1. Easy (100HP, 50 armor, range 3)\n"; 
-    cout << "2. Normal (80HP, 30 armor, range 2)\n";
-    cout << "3. Hard (60HP, 0 armor, range 1)\n";
-    cout << "====================\n";
-    cout << "Enter choice (1-3): ";
+    int selection = 1; // Default to Easy (option 1)
+    char input;
     
-    while(true) {
-        char input = getch();
-        if(input >= '1' && input <= '3') {
-            return static_cast<Difficulty>(input - '1');
+    while (true) {
+        clearScreen();   
+        cout << COLOR_BOLD << "SELECT DIFFICULTY:\n\n" << COLOR_RESET;
+        
+        // Option 1
+        if (selection == 1) cout << COLOR_GREEN << "> 1. Easy ";
+        else cout << "  1. Easy ";
+        cout << COLOR_RESET << "   (100HP | 50 armor | range 4)\n" << endl;
+        
+        // Option 2
+        if (selection == 2) cout << COLOR_YELLOW << "> 2. Normal ";
+        else cout << "  2. Normal ";
+        cout << COLOR_RESET << " (80HP  | 30 armor | range 3)\n" << endl;
+        
+        // Option 3
+        if (selection == 3) cout << COLOR_RED << "> 3. Hard ";
+        else cout << "  3. Hard ";
+        cout << COLOR_RESET << "   (60HP  |  0 armor | range 2)\n";
+        
+        cout << COLOR_CYAN << "\nUse 1-3 to select, ENTER to confirm\n" << COLOR_RESET;;
+        cout << "====================\n";
+        
+        
+        input = getch();
+        
+        // Only process valid inputs
+        switch(input) {
+            case '1':
+                selection = 1;
+                break;
+            case '2':
+                selection = 2;
+                break;
+            case '3':
+                selection = 3;
+                break;
+            case '\n':  // Enter key
+            case '\r':
+                return static_cast<Difficulty>(selection - 1);
+            default:
+                continue;
         }
     }
 }
 
+// Function to show game over screen
+void showGameOverScreen(int wave) {
+    clearScreen();
+    cout << COLOR_RED << COLOR_BOLD;
+    cout << "  _____                         ____                 \n";
+    cout << " / ____|                       / __ \\                \n";
+    cout << "| |  __  __ _ _ __ ___   ___  | |  | |_   _____ _ __ \n";
+    cout << "| | |_ |/ _` | '_ ` _ \\ / _ \\ | |  | \\ \\ / / _ \\ '__|\n";
+    cout << "| |__| | (_| | | | | | |  __/ | |__| |\\ V /  __/ |   \n";
+    cout << " \\_____|\\__,_|_| |_| |_|\\___|  \\____/  \\_/ \\___|_|   \n\n";
+    cout << COLOR_RESET;
+    cout << COLOR_YELLOW << "You survived until wave " << wave << "\n\n" << COLOR_RESET;
+    cout << COLOR_CYAN << "Press ENTER to return to the main menu..." << COLOR_RESET;
+    
+    // Wait specifically for Enter key
+    char input;
+    do {
+        input = getch();
+    } while (input != '\n' && input != '\r');  // Wait for Enter key
+}
+
+// Function to show victory screen
+void showVictoryScreen() {
+    clearScreen();
+    cout << COLOR_GREEN << COLOR_BOLD;
+    cout << " __     __                    _       _ \n";
+    cout << " \\ \\   / /                   (_)     | |\n";
+    cout << "  \\ \\_/ /__  _   _  __      ___ _ __ | |\n";
+    cout << "   \\   / _ \\| | | | \\ \\ /\\ / / | '_ \\| |\n";
+    cout << "    | | (_) | |_| |  \\ V  V /| | | | |_|\n";
+    cout << "    |_|\\___/ \\__,_|   \\_/\\_/ |_|_| |_(_)\n\n";
+    cout << COLOR_RESET;
+    cout << COLOR_YELLOW << "CONGRATULATIONS! You survived all " << MAX_WAVES << " waves!\n\n" << COLOR_RESET;
+    cout << COLOR_CYAN << "Press ENTER to return to the main menu..." << COLOR_RESET;
+    
+    // Wait specifically for Enter key
+    char input;
+    do {
+        input = getch();
+    } while (input != '\n' && input != '\r');  // Wait for Enter key
+}
+
+// Function to initialize the game state
 void gameLoop() {
     srand(time(nullptr));
     
@@ -37,40 +114,95 @@ void gameLoop() {
     GameState state;
     initializeGameState(state, player);
     
+    auto lastZombieMove = chrono::steady_clock::now();
+    const chrono::milliseconds zombieMoveInterval(500);
+    
     while (!state.gameOver) {
         drawGame(state, player);
 
-        // Check if player won all waves
         if (state.currentWave > MAX_WAVES) {
-            cout << "\n\nCONGRATULATIONS! You survived all waves!\n";
+            showVictoryScreen();
             break;
         }
         
-        char input;
         if (kbhit()) {
-            input = getch();
+            char input = getch();
             input = tolower(input);
             
             switch (input) {
                 case 'w': case 'a': case 's': case 'd':
                     movePlayer(state, player, input);
-                    // Zombies move after player moves
-                    moveZombies(state, player);
                     break;
-                case 'q':
-                    state.gameOver = true;
+                case 'e': // Shoot bullet
+                    shootBullet(state, player);
+                    break;
+                case 'q': {
+                    bool shouldQuit = showQuitConfirmation(true);
+                    if (shouldQuit) {
+                        state.gameOver = true;
+                        exit(0); // Exit game completely
+                    }
                     break;
             }
-        } else {
-            usleep(100000);
-        }
-
-        if (player.health <= 0) {
-            state.gameOver = true;
         }
     }
+        auto now = chrono::steady_clock::now();
+        if (now - lastZombieMove >= zombieMoveInterval) {
+            moveZombies(state, player);
+            lastZombieMove = now;
+        }
+        
+        usleep(10000);
+        
+        if (player.health <= 0) {
+            state.gameOver = true;
+            showGameOverScreen(state.currentWave);
+            break;
+        }
+    }
+}
+
+// Function to show quit confirmation dialog
+bool showQuitConfirmation(bool inGame) {
+    int selection = 1; // Default to "Return to Main Menu"
+    char input;
     
-    if (state.currentWave <= MAX_WAVES) {
-        cout << "\n\nGAME OVER! You survived until wave " << state.currentWave << "\n";
+    while (true) {
+        clearScreen();
+        cout << COLOR_BOLD << COLOR_RED << "QUIT GAME?\n" << COLOR_RESET;
+        cout << COLOR_YELLOW << "Are you sure you want to quit?\n\n" << COLOR_RESET;
+        
+        // Option 1 - Change text based on context
+        if (selection == 1) {
+            cout << COLOR_GREEN << "> 1. " << (inGame ? "Return to The Game" : "Return to Title Screen") << "\n" << endl;
+        } else {
+            cout << COLOR_RESET << "  1. " << (inGame ? "Return to The Game" : "Return to Title Screen") << "\n" << endl;
+        }
+        
+        // Option 2
+        if (selection == 2) cout << COLOR_RED << "> 2. Quit Game\n";
+        else cout << COLOR_RESET << "  2. Quit Game\n";
+        
+        cout << COLOR_CYAN << "\nUse 1-2 to select, ENTER to confirm\n" << COLOR_RESET;
+        cout << "====================\n";
+        
+        input = getch();
+        
+        // Only process valid inputs
+        switch(input) {
+            case '1':
+                selection = 1;
+                break;
+            case '2':
+                selection = 2;
+                break;
+            case '\n':  // Enter key
+            case '\r':
+                return (selection == 2); // true if quit game, false if return
+            case 'q':    // Allow q to cancel
+                return false;
+            default:
+                continue;
+        }
     }
 }

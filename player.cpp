@@ -3,13 +3,22 @@
 #include "player.h"
 #include <algorithm>
 #include <random>
+#include "map.h"
+#include <unistd.h>
 
+const char PLAYER_UP[] = "/@\\";
+const char PLAYER_DOWN[] = "\\@/";
+const char PLAYER_LEFT[] = "<@";
+const char PLAYER_RIGHT[] = "@>";
+
+// Function to initialize the player
 Player initializePlayer(Difficulty difficulty) {
     Player p;
     p.x = MAP_WIDTH / 2;
     p.y = MAP_HEIGHT / 2;
     p.money = 0;
     p.difficulty = difficulty;
+    p.facing = DIR_NONE;
     
     switch(difficulty) {
         case EASY:
@@ -17,28 +26,33 @@ Player initializePlayer(Difficulty difficulty) {
             p.maxHealth = 100;
             p.armor = 20;
             p.maxArmor = 50;
-            p.attackRange = 3;
+            p.attackRange = 4;
             break;
         case NORMAL:
             p.health = 80;
             p.maxHealth = 80;
             p.armor = 10;
             p.maxArmor = 30;
-            p.attackRange = 2;
+            p.attackRange = 3;
             break;
         case HARD:
             p.health = 60;
             p.maxHealth = 60;
             p.armor = 0;
-            p.maxArmor = 0;
-            p.attackRange = 1;
+            p.maxArmor = 10;
+            p.attackRange = 2;
             break;
     }
     
     return p;
 }
 
-void spawnRandomItem(GameState& state, bool isZombieKill) {
+void spawnRandomItem(GameState& state, Player& player, bool isZombieKill) {
+    // Don't spawn items in Hard difficulty
+    if (player.difficulty == HARD) {
+        return;
+    }
+    
     // Higher chance to spawn if zombie was killed
     int spawnChance = isZombieKill ? 3 : 10; // 1 in 3 vs 1 in 10 chance
     
@@ -85,138 +99,148 @@ void spawnRandomItem(GameState& state, bool isZombieKill) {
     }
 }
 
-bool killZombiesInDirection(GameState& state, Player& player, char direction) {
+void shootBullet(GameState& state, Player& player) {
     int dx = 0, dy = 0;
-    bool killedAny = false;
-    
-    switch (direction) {
-        case 'w': dy = -1; break; // Up
-        case 's': dy = 1; break;  // Down
-        case 'a': dx = -1; break; // Left
-        case 'd': dx = 1; break;  // Right
-        default: return false;
+    switch (player.facing) {
+        case DIR_UP: dy = -1; break;
+        case DIR_DOWN: dy = 1; break;
+        case DIR_LEFT: dx = -1; break;
+        case DIR_RIGHT: dx = 1; break;
+        case DIR_NONE: return;
     }
-    
-    // Check each tile in range for zombies
+
+    // Adjust starting position based on facing direction
+    int startOffset = (player.facing == DIR_RIGHT) ? 1 : 0;
+
+    // Animate bullet
     for (int i = 1; i <= player.attackRange; i++) {
-        int checkX = player.x + (dx * i);
-        int checkY = player.y + (dy * i);
-        
-        // Skip if out of bounds
-        if (checkX < 0 || checkX >= MAP_WIDTH || checkY < 0 || checkY >= MAP_HEIGHT) {
-            continue;
-        }
-        
-        // If we find a zombie, kill it and stop checking further
-        if (state.map[checkY][checkX] == ZOMBIE) {
-            auto it = find(state.zombie.begin(), state.zombie.end(), make_pair(checkX, checkY));
+        int bulletX = player.x + dx * i + (dx > 0 ? startOffset : 0);
+        int bulletY = player.y + dy * i;
+
+        // Check bounds
+        if (bulletX <= 0 || bulletX >= MAP_WIDTH-1 || bulletY <= 0 || bulletY >= MAP_HEIGHT-1)
+            break;
+
+        // Check if hit zombie
+        if (state.map[bulletY][bulletX] == ZOMBIE) {
+            // Find and remove zombie
+            auto it = find(state.zombie.begin(), state.zombie.end(), make_pair(bulletX, bulletY));
             if (it != state.zombie.end()) {
                 state.zombie.erase(it);
-                state.map[checkY][checkX] = EMPTY;
-                player.money += 20;
-                killedAny = true;
-                break; // Stop after killing one zombie
-            }
-        }
-        else if (state.map[checkY][checkX] == WALL) {
-            break; // Stop if we hit a wall
-        }
-    }
-
-    if (killedAny) {
-        state.zombiesRemaining--;  // Decrement remaining zombies
-        spawnRandomItem(state, true);
-        
-        // Check if wave is complete
-        if (state.zombiesRemaining <= 0) {
-            state.currentWave++;
-            if (state.currentWave <= MAX_WAVES) {
-                state.zombiesRemaining = INITIAL_ZOMBIES + (state.currentWave - 1) * ZOMBIE_INCREMENT;
-                // Spawn new wave of zombies
-                for (int i = 0; i < state.zombiesRemaining; i++) {
-                    int zx, zy;
-                    do {
-                        zx = rand() % (MAP_WIDTH - 2) + 1;
-                        zy = rand() % (MAP_HEIGHT - 2) + 1;
-                    } while (state.map[zy][zx] != EMPTY);
-                    state.zombie.push_back({zx, zy});
-                    state.map[zy][zx] = ZOMBIE;
+                state.map[bulletY][bulletX] = EMPTY;
+                player.money += 5;
+                state.zombiesRemaining--;
+                
+                // Check wave completion
+                if (state.zombiesRemaining <= 0) {
+                    state.currentWave++;
+                    if (state.currentWave <= MAX_WAVES) {
+                        state.zombiesRemaining = INITIAL_ZOMBIES + (state.currentWave - 1) * ZOMBIE_INCREMENT;
+                        // Spawn new zombies
+                        for (int i = 0; i < state.zombiesRemaining; i++) {
+                            int zx, zy;
+                            do {
+                                zx = rand() % (MAP_WIDTH - 2) + 1;
+                                zy = rand() % (MAP_HEIGHT - 2) + 1;
+                            } while (state.map[zy][zx] != EMPTY);
+                            state.zombie.push_back({zx, zy});
+                            state.map[zy][zx] = ZOMBIE;
+                        }
+                    }
                 }
-            } else {
-                // Player won all waves
-                state.gameOver = true;
+                if (player.difficulty != HARD) {
+                    spawnRandomItem(state, player, true);
+                }
             }
+            break;
         }
+        // Stop at walls
+        else if (state.map[bulletY][bulletX] == WALL) {
+            break;
+        }
+
+        // Show bullet animation
+        state.map[bulletY][bulletX] = '*';
+        drawGame(state, player);
+        usleep(50000); // 50ms delay
+        state.map[bulletY][bulletX] = EMPTY;
     }
-    
-    return killedAny;
 }
 
+// Modify movePlayer to update facing direction
 void movePlayer(GameState& state, Player& player, char input) {
-    // First try to kill zombies in the direction
-    bool killedZombies = killZombiesInDirection(state, player, input);
+    // Update facing direction
+    switch (input) {
+        case 'w': player.facing = DIR_UP; break;
+        case 'a': player.facing = DIR_LEFT; break;
+        case 's': player.facing = DIR_DOWN; break;
+        case 'd': player.facing = DIR_RIGHT; break;
+    }
+
+    int newX = player.x;
+    int newY = player.y;
     
-    // Only move if no zombies were killed
-    if (!killedZombies) {
-        int newX = player.x;
-        int newY = player.y;
+    switch (input) {
+        case 'w': newY--; break;
+        case 'a': newX--; break;
+        case 's': newY++; break;
+        case 'd': newX++; break;
+        default: return; // Only handle movement keys here
+    }
+    
+    // Adjust boundary check for right-facing movement
+    if (player.facing == DIR_RIGHT && newX >= MAP_WIDTH - 2) {
+        return; // Prevent moving too close to the right wall
+    }
+
+    if (newX > 0 && newX < MAP_WIDTH-1 && newY > 0 && newY < MAP_HEIGHT-1) {
+        char target = state.map[newY][newX];
         
-        switch (input) {
-            case 'w': newY--; break;
-            case 'a': newX--; break;
-            case 's': newY++; break;
-            case 'd': newX++; break;
+        if (target == WALL) return;
+
+        // Handle store items
+        if (target == HEALTH_ITEM) {
+            if (player.money >= 10 && player.health < player.maxHealth) {
+                player.money -= 10;
+                player.health = min(player.health + 10, player.maxHealth);
+                state.map[newY][newX] = EMPTY;
+            }
+            return;
+        }
+        if (target == ARMOR_ITEM) {
+            if (player.money >= 15 && player.armor < player.maxArmor) {
+                player.money -= 15;
+                player.armor = min(player.armor + 10, player.maxArmor);
+                state.map[newY][newX] = EMPTY;
+            }
+            return;
+        }
+        if (target == RANGE_ITEM) {
+            if (player.money >= 20 && player.attackRange < 8) {
+                player.money -= 20;
+                player.attackRange++;
+                state.map[newY][newX] = EMPTY;
+            }
+            return;
+        }
+
+        if (target == COIN) {
+            auto it = find(state.coin.begin(), state.coin.end(), std::make_pair(newX, newY));
+            if (it != state.coin.end()) {
+                state.coin.erase(it);
+                player.money += 1;
+            }
         }
         
-        if (newX >= 0 && newX < MAP_WIDTH && newY >= 0 && newY < MAP_HEIGHT) {
-            char target = state.map[newY][newX];
-            
-            if (target == WALL) return;
+        if (target == EMPTY || target == COIN) {
+            state.map[player.y][player.x] = EMPTY;
+            player.x = newX;
+            player.y = newY;
+            state.map[player.y][player.x] = PLAYER;
 
-            // Handle store items
-            if (target == HEALTH_ITEM) {
-                if (player.money >= 10 && player.health < player.maxHealth) {
-                    player.money -= 10;
-                    player.health = min(player.health + 10, player.maxHealth);
-                    state.map[newY][newX] = EMPTY;
-                }
-                return;
-            }
-            if (target == ARMOR_ITEM) {
-                if (player.money >= 15 && player.armor < player.maxArmor) {
-                    player.money -= 15;
-                    player.armor = min(player.armor + 10, player.maxArmor);
-                    state.map[newY][newX] = EMPTY;
-                }
-                return;
-            }
-            if (target == RANGE_ITEM) {
-                if (player.money >= 20 && player.attackRange < 8) {
-                    player.money -= 20;
-                    player.attackRange++;
-                    state.map[newY][newX] = EMPTY;
-                }
-                return;
-            }
-
-            if (target == COIN) {
-                auto it = find(state.coin.begin(), state.coin.end(), std::make_pair(newX, newY));
-                if (it != state.coin.end()) {
-                    state.coin.erase(it);
-                    player.money += 1;
-                }
-            }
-            
-            if (target == EMPTY || target == COIN) {
-                state.map[player.y][player.x] = EMPTY;
-                player.x = newX;
-                player.y = newY;
-                state.map[player.y][player.x] = PLAYER;
-
-                // Small chance to spawn item when moving
-                if ((rand() % 20) == 0) { // 1 in 20 chance
-                    spawnRandomItem(state, false);
-                }
+            // Small chance to spawn item when moving (only if not Hard difficulty)
+            if (player.difficulty != HARD && (rand() % 20) == 0) {
+                spawnRandomItem(state, player, false);
             }
         }
     }

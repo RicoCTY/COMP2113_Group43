@@ -29,13 +29,23 @@ const char COIN = '$';
 const char ZOMBIE = 'Z';
 const char BLOCK = '=';
 
+// Item symbols
 const char HEALTH_ITEM = 'H';
 const char ARMOR_ITEM = 'A';
 const char RANGE_ITEM = 'R';
 
-const int MAX_WAVES = 10;
-const int INITIAL_ZOMBIES = 1;
-const int ZOMBIE_INCREMENT = 1;  // Each wave adds this many zombies
+// Game settings
+const int MAX_WAVES = 5;
+const int INITIAL_ZOMBIES = 2; // Initial number of zombies
+const int ZOMBIE_INCREMENT = 3;  // Each wave adds this many zombies
+
+enum FacingDirection {
+    DIR_NONE,
+    DIR_UP,
+    DIR_DOWN,
+    DIR_LEFT,
+    DIR_RIGHT
+};
 
 // Player structure
 struct Player {
@@ -47,6 +57,7 @@ struct Player {
     int maxArmor;
     int attackRange;
     Difficulty difficulty;
+    FacingDirection facing;
 };
 
 // Game state
@@ -61,6 +72,7 @@ struct GameState {
 
 // Function declarations
 void initializeGameState(GameState& state, Player& player);
+bool showQuitConfirmation(bool inGame);
 void gameLoop();
 
 #endif

@@ -8,6 +8,7 @@
 
 // Map functions
 void initializeGameState(GameState& state, Player& player);
+bool canPlaceWall(const GameState& state, int x, int y, int length, bool horizontal);
 void drawGame(const GameState& state, const Player&);
 
 #endif

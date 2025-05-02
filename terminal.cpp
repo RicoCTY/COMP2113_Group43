@@ -10,6 +10,7 @@ void clearScreen() {
     cout << "\033[2J\033[1;1H";
 }
 
+// Function to get a single character input without waiting for Enter
 char getch() {
     char c;
     system("stty raw");
