@@ -17,8 +17,11 @@
 	7. [player.h](player.h)
 	
 # For Player
+
 ## Team members 
+
 Choi Tsz Yin 3036259176
+
 Yau Tik Hang 3036262018
 
 ## How to play
@@ -30,6 +33,8 @@ make run
 - Press *w/s/a/d* to move
 - Press ** to shoot
 - Press *q* to quit
+
+- 
 ## Quick DEMO (link)
 
 ## Features implemented
@@ -63,11 +68,49 @@ make run
 
 Welcome to our zombie survival shooting game written in C++! In this game, you may experience shooting zombie in 2D!
 
-Game story context: In 2400, A virus named "Zombious Virus" outbreaked and it will infect people turns to a zombie. You are assigned by government to kill the zombie using a gun. 
+Game story context:The year is 2077. Neo-Kyoto, a sprawling metropolis of neon-drenched skyscrapers and rain-slicked alleyways, is under siege. Not by invading armies
+
+or corporate overlords, but by something far more insidious: The Rust. A nanite plague, unleashed by a rogue scientist, has reanimated the dead, turning them into 
+
+grotesque, chrome-plated zombies. These aren't your typical shambling corpses; The Rust has enhanced their speed, agility, and resilience, turning them into terrifying 
+
+predators.
+
+You are... well, you. A former Yakuza enforcer, disgraced and left for dead after a botched mission. The Yakuza, however, doesn't let go so easily. They found you,
+
+patched you up with scavenged cybernetics, and offered you a deal: cleanse Neo-Kyoto of The Rust, or face a fate far worse than death.
+
+Your arsenal consists of a cybernetically enhanced katana, capable of slicing through steel and bone with ease, and a custom-built railgun, a devastating weapon that 
+
+can vaporize hordes of zombies with a single shot. But firepower alone won't be enough. You'll need to master the art of "Blade and Bullet Ballet," seamlessly switching
+
+between katana strikes and railgun blasts, chaining combos to maximize your damage output.
+
+As you carve your way through the undead hordes, you'll explore the diverse districts of Neo-Kyoto. From the bustling marketplace of Akihabara, now overrun with 
+
+zombified shoppers, to the serene gardens of Gion, defiled by the Rust's grotesque touch, each location presents unique challenges and opportunities. You'll encounter
+
+specialized zombie variants: hulking brutes with reinforced cybernetics, agile ninjas who strike from the shadows, and grotesque bio-weapons spewing corrosive acid.
+
+But The Rust is more than just a plague. It's a conspiracy that reaches the highest echelons of power. As you delve deeper into the city's underbelly, you'll uncover a 
+
+web of lies, betrayal, and corporate greed. You'll encounter allies and enemies, each with their own agenda. A mysterious hacker known only as "Zero" offers you cryptic
+
+clues and technological support. A ruthless corporate executive, obsessed with controlling The Rust for his own gain, becomes your primary target. And a former comrade,
+
+now twisted by the plague, stands as a formidable obstacle in your path.
+
+Your journey will be one of self-discovery and redemption. Haunted by the ghosts of your past, you'll confront your inner demons and make difficult choices that will 
+
+determine the fate of Neo-Kyoto. Will you succumb to the darkness and become another monster, or will you rise as the city's unlikely savior?
+
+The fate of Neo-Kyoto rests in your hands. Sharpen your katana, load your railgun, and prepare to paint the city red with the blood of the undead. The Rust awaits.
 
 In this game, you will be spawned at a map and there are many zombie located around you. You need to kill all the zombie on the map to win the game.
 
-On the map, there are some citizens located around the map, you need save all the citizens from the zombie before you kill all the zombies, otherise, you mark maybe deducted!
+On the map, there are some citizens located around the map, you need save all the citizens from the zombie before you kill all the zombies, otherise, you mark maybe 
+
+deducted!
 
 Also, around the map, there are many coins randomly dropped. You can collect those coins around the map while killing zombies to upgrade your weapon!
 
