@@ -35,7 +35,6 @@ void gameLoop() {
     
     Difficulty difficulty = selectDifficulty();
     Player player = initializePlayer(difficulty);
-    player.facing = DIR_RIGHT; // Default facing direction
     GameState state;
     initializeGameState(state, player);
     

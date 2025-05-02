@@ -17,6 +17,7 @@ Player initializePlayer(Difficulty difficulty) {
     p.y = MAP_HEIGHT / 2;
     p.money = 0;
     p.difficulty = difficulty;
+    p.facing = DIR_NONE;
     
     switch(difficulty) {
         case EASY:
@@ -99,6 +100,7 @@ void shootBullet(GameState& state, Player& player) {
         case DIR_DOWN: dy = 1; break;
         case DIR_LEFT: dx = -1; break;
         case DIR_RIGHT: dx = 1; break;
+        case DIR_NONE: return;
     }
 
     // Adjust starting position based on facing direction
@@ -165,6 +167,7 @@ void meleeAttack(GameState& state, Player& player) {
         case DIR_DOWN: checkY++; break;
         case DIR_LEFT: checkX--; break;
         case DIR_RIGHT: checkX++; break;
+        case DIR_NONE: return;
     }
 
     // Check if zombie is in front
@@ -221,6 +224,11 @@ void movePlayer(GameState& state, Player& player, char input) {
         default: return; // Only handle movement keys here
     }
     
+    // Adjust boundary check for right-facing movement
+    if (player.facing == DIR_RIGHT && newX >= MAP_WIDTH - 2) {
+        return; // Prevent moving too close to the right wall
+    }
+
     if (newX > 0 && newX < MAP_WIDTH-1 && newY > 0 && newY < MAP_HEIGHT-1) {
         char target = state.map[newY][newX];
         

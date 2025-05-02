@@ -38,6 +38,7 @@ const int INITIAL_ZOMBIES = 1;
 const int ZOMBIE_INCREMENT = 1;  // Each wave adds this many zombies
 
 enum FacingDirection {
+    DIR_NONE,
     DIR_UP,
     DIR_DOWN,
     DIR_LEFT,

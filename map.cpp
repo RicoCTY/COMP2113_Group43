@@ -55,38 +55,35 @@ void initializeGameState(GameState& state, Player& player) {
 void drawGame(const GameState& state, const Player& player) {
     clearScreen();
     
-    // Draw map
     for (int y = 0; y < MAP_HEIGHT; y++) {
         for (int x = 0; x < MAP_WIDTH; x++) {
             if (x == player.x && y == player.y) {
-                switch (player.facing) {
-                    case DIR_UP: 
-                        cout << "/@\\";
-                        x += 2; // Skip next two positions
-                        break;
-                    case DIR_DOWN: 
-                        cout << "\\@/";
-                        x += 2; // Skip next two positions
-                        break;
-                    case DIR_LEFT: 
-                        cout << "<@";
-                        x += 1; // Skip next position
-                        break;
-                    case DIR_RIGHT: 
-                        cout << "@>";
-                        x += 1; // Skip next position
-                        break;
+                // Default: Just show '@' if no facing direction
+                if (player.facing == DIR_RIGHT || player.facing == DIR_LEFT || 
+                    player.facing == DIR_UP || player.facing == DIR_DOWN) {
+                    // Show directional symbol only if player has moved
+                    switch (player.facing) {
+                        case DIR_UP: cout << "//@\\\\ "; x += 2; break;
+                        case DIR_DOWN: cout << "\\\\@// "; x += 2; break;
+                        case DIR_LEFT: cout << "<@"; x += 0; break;
+                        case DIR_RIGHT: cout << "@>"; x += 0; break;
+                        case DIR_NONE: cout << "@ "; break;
+                    }
+                } else {
+                    // Default: Just '@' (no facing direction)
+                    cout << "@ ";
                 }
-            } else {
-                cout << state.map[y][x];
-                if (x < MAP_WIDTH - 1) {
-                    cout << " ";
-                }
+                continue; // Skip adding space after player
             }
+            
+            // Normal map rendering
+            cout << state.map[y][x];
+            if (x < MAP_WIDTH - 1) cout << " ";
         }
         cout << endl;
     }
     
+    // Display player stats
     cout << " | Health: " << player.health << "/" << player.maxHealth;
     cout << " | Armor: " << player.armor << "/" << player.maxArmor;
     cout << " | Range: " << player.attackRange;
