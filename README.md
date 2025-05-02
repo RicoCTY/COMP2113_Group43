@@ -47,23 +47,23 @@ make clean
 
 - **1. Generation of Random Events (see map.cpp, player.cpp)**
 
- - Zombies spawn in random locations each wave
+   - Zombies spawn in random locations each wave
 
- - Zombie movement has random elements while still tracking player
+   - Zombie movement has random elements while still tracking player
 
- - Power-ups (health, armor, range) spawn randomly when:
+   - Power-ups (health, armor, range) spawn randomly when:
 
    - Killing zombies ***(higher chance)***
 
    - Moving around the map ***(lower chance)***
 
- - Walls are procedurally generated in different configurations (Straight or horizontal)
+   - Walls are procedurally generated in different configurations (Straight or horizontal)
 
 - **2. Data Structures For Storing Data (see game.h, player.h)**
 
- - Player struct stores all character stats (health, armor, money, position)
+   - Player struct stores all character stats (health, armor, money, position)
 
- - GameState struct manages:
+   - GameState struct manages:
 
    - Current map layout
 
