@@ -3,8 +3,9 @@
 ![WhatsApp Image 2025-05-02 at 22 43 48_1f132676](https://github.com/user-attachments/assets/742e527f-63f5-40aa-8e77-18144c782c6b)
 
 ## Team Members
-- [Choi Tsz Yin (3036259176)](https://github.com/RicoCTY)
-- [Yau Tik Hang (3036262018)](https://github.com/YauTikHang)
+ [Choi Tsz Yin](https://github.com/RicoCTY) (3036259176)
+ 
+ [Yau Tik Hang](https://github.com/YauTikHang) (3036262018)
 
 ## Description
 🧟 **Zombie Rush** is an intense 2D survival shooter game written in C++ where you must defend against waves of undead!
@@ -45,7 +46,7 @@ make clean
 
 ## Features Implemented
 
-- **1. Generation of Random Events (see map.cpp, player.cpp)**
+### **1. Generation of Random Events (see map.cpp, player.cpp)** ###
 
    - Zombies spawn in random locations each wave
 
@@ -59,7 +60,7 @@ make clean
 
    - Walls are procedurally generated in different configurations (Straight or horizontal)
 
-- **2. Data Structures For Storing Data (see game.h, player.h)**
+### **2. Data Structures For Storing Data (see game.h, player.h)** ###
 
    - Player struct stores all character stats (health, armor, money, position)
 
@@ -73,19 +74,19 @@ make clean
 
       - Wave progression
 
-- **3. Dynamic Memory Management (see player.cpp)**
+### **3. Dynamic Memory Management (see player.cpp)** ###
 
    - Vectors used for zombie and coin positions automatically handle dynamic memory
 
    - Efficient memory usage through proper data structure selection
 
-- **4. File Input/Output (see terminal.cpp)**
+### **4. File Input/Output (see terminal.cpp)** ###
 
    - Terminal state management for real-time input handling
 
    - Game state preserved during gameplay sessions
 
-- **5. Program Codes in Multiple Files**
+### **5. Program Codes in Multiple Files** ###
 
    - Clean separation of concerns across:
 
@@ -99,7 +100,7 @@ make clean
 
      - Main entry point (main.cpp)
 
-   - Architecture:
+   Architecture:
    ```bash
        src/
        ├── Makefile       # For code compilation
@@ -109,8 +110,9 @@ make clean
        ├── map.cpp/h      # Map generation
        ├── terminal.cpp/h # Terminal handling
        └── main.cpp       # Entry point
+   ```
 
-- **6. Multiple Difficulty Levels (see game.cpp)**
+### **6. Multiple Difficulty Levels (see game.cpp)**
 
   - Three distinct levels:
       | Difficulty | Health | Armor | Range | Items available |
