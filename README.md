@@ -53,9 +53,9 @@ make clean
 
    - Power-ups (health, armor, range) spawn randomly when:
 
-   - Killing zombies ***(higher chance)***
+      - Killing zombies ***(higher chance)***
 
-   - Moving around the map ***(lower chance)***
+      - Moving around the map ***(lower chance)***
 
    - Walls are procedurally generated in different configurations (Straight or horizontal)
 
@@ -65,13 +65,13 @@ make clean
 
    - GameState struct manages:
 
-   - Current map layout
+      - Current map layout
 
-   - Zombie positions (vector of pairs)
+      - Zombie positions (vector of pairs)
 
-   - Coin positions (vector of pairs)
+      - Coin positions (vector of pairs)
 
-   - Wave progression
+      - Wave progression
 
 - **3. Dynamic Memory Management (see player.cpp)**
 
