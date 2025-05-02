@@ -21,7 +21,8 @@
 ## How to Play
 
 ### Quick DEMO
-[Insert video link here]
+
+https://drive.google.com/file/d/1A7skSvggePRmOMAEJOeDP2SuS30qjcDD/view?usp=drivesdk
 
 ### Running the Program
 To compile and run the game:
