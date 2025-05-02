@@ -92,5 +92,5 @@ void drawGame(const GameState& state, const Player& player) {
     cout << " | Zombies: " << state.zombiesRemaining;
     
     cout << "\n\nControls: WASD to move, E to shoot, Q to quit" << endl;
-    cout << "\nStore items: H(Health $10) A(Armor $15) R(Range $20)" << endl;
+    cout << "\nItems: H(Health $10) A(Armor $15) R(Range $20)" << endl;
 }
