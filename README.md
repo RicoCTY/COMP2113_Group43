@@ -1,174 +1,129 @@
+# COMP2113_Group43 - Zombie Rush
 
-# Menu
-1. [For Player](#for-player) 
-	1. [Team members](#Team-members-)
-	2. [How to play](#how-to-play-)
-	3. [Quick DEMO](#quick-demo)
-	4. [Features implemented](#features-implemented-)
-	5. [Discription](#description-)
-	6. [Non-standard libraries](#non-standard-libraries-%EF%B8%8F)
-2. [File discription](#File discription)
-	1. [game.cpp](#game.cpp)
-	2. [game.h](#game.h)
-	3. [main.cpp](#main.cpp)
-	4. [map.cpp](#map.cpp)
-	5. [map.h](#map.h)
-	6. [player.cpp](#player.cpp)
-	7. [player.h](player.h)
-	
-# For Player
+![WhatsApp Image 2025-05-02 at 22 43 48_ee8792c8](https://github.com/user-attachments/assets/63ba65ad-b1ec-42dd-9160-5001af2836c3)
 
-## Team members 
+## Team Members
+- [Choi Tsz Yin (3036259176)](https://github.com/RicoCTY)
+- [Yau Tik Hang (3036262018)](https://github.com/YauTikHang)
 
-Choi Tsz Yin 3036259176
+## Description
+🧟 *Zombie Rush* is an intense 2D survival shooter game written in C++ where you must defend against waves of undead! 
 
-Yau Tik Hang 3036262018
+🫨 Oh no! Zombies are invading the University of Hong Kong! Grab your weapon and defend your campus before it's overrun! Your goal is simple - survive wave after wave of relentless zombies to see tomorrow's dawn. 
 
-## How to play
+⁉ These aren't your ordinary slow zombies - they move with terrifying intelligence, sometimes heading straight for you, sometimes taking unpredictable paths. Carefully aim your shots!
 
-```bash
+⚔ Random power-ups will spawn throughout the map - grab them to upgrade your firepower, armor, or health. Think you're good? Try our brutal Hard mode where items don't spawn at all! 
+
+💥 With multiple difficulty levels and increasingly challenging waves, Zombie Rush offers endless undead-slaying action. If you love fast-paced shooting games with survival elements, this is your next addiction!
+
+## How to Play
+
+### Quick DEMO
+[Insert video link here]
+
+### Running the Program
+To compile and run the game:
+bash
 make run
-```
-- Press any key to start
-- Press *w/s/a/d* to move
-- Press ** to shoot
-- Press *q* to quit
 
-- 
-## Quick DEMO (link)
+To clean up compiled files:
 
-## Features implemented
+bash
+make clean
 
-- **Generation of random game sets or events**
+### Controls
+- W / A / S / D : *Move your character*
 
-    - There are random ways of spawning zombies, coins and stone
-⁣⁣⁣⁣
-- **Dynamic memory management**
+- E : *Shoot in your facing direction*
 
-    - We handle allocation and deallocation of dynamic memory
-⁣⁣⁣⁣
-- **File input/output**
+- 1 /2 /3 : *Select menu options*
 
-    - Data of game are stored so the data will not lost when they player quit the game
-⁣⁣⁣⁣
-- **Data structures for storing game status**
+- ENTER : *Confirm selections*
 
-    - We define a class to store the game status such as player health and player coins
-⁣⁣⁣⁣
-- **Program codes in multiple files**
+- Q : *Open quit menu*
 
-    - Several file are used
-⁣⁣⁣⁣
-- **Multiple difficulty level**
+## Features Implemented
 
-    - Different level are created
+- *1. Generation of Random Events (see map.cpp, player.cpp)*
 
+  - Zombies spawn in random locations each wave
 
-## Game Description 
+  - Zombie movement has random elements while still tracking player
 
-Welcome to our zombie survival shooting game written in C++! In this game, you may experience shooting zombie in 2D!
+  - Power-ups (health, armor, range) spawn randomly when:
 
-Game story context:The year is 2077. Neo-Kyoto, a sprawling metropolis of neon-drenched skyscrapers and rain-slicked alleyways, is under siege. Not by invading armies
+    - Killing zombies **(higher chance)**
 
-or corporate overlords, but by something far more insidious: The Rust. A nanite plague, unleashed by a rogue scientist, has reanimated the dead, turning them into 
+    - Moving around the map **(lower chance)**
 
-grotesque, chrome-plated zombies. These aren't your typical shambling corpses; The Rust has enhanced their speed, agility, and resilience, turning them into terrifying 
+  - Walls are procedurally generated in different configurations (Straight or horizontal)
 
-predators.
+- *2. Data Structures For Storing Data (see game.h, player.h)*
 
-You are... well, you. A former Yakuza enforcer, disgraced and left for dead after a botched mission. The Yakuza, however, doesn't let go so easily. They found you,
+  - Player struct stores all character stats (health, armor, money, position)
 
-patched you up with scavenged cybernetics, and offered you a deal: cleanse Neo-Kyoto of The Rust, or face a fate far worse than death.
+  - GameState struct manages:
 
-Your arsenal consists of a cybernetically enhanced katana, capable of slicing through steel and bone with ease, and a custom-built railgun, a devastating weapon that 
+    - Current map layout
 
-can vaporize hordes of zombies with a single shot. But firepower alone won't be enough. You'll need to master the art of "Blade and Bullet Ballet," seamlessly switching
+    - Zombie positions (vector of pairs)
 
-between katana strikes and railgun blasts, chaining combos to maximize your damage output.
+    - Coin positions (vector of pairs)
 
-As you carve your way through the undead hordes, you'll explore the diverse districts of Neo-Kyoto. From the bustling marketplace of Akihabara, now overrun with 
+    - Wave progression
 
-zombified shoppers, to the serene gardens of Gion, defiled by the Rust's grotesque touch, each location presents unique challenges and opportunities. You'll encounter
+- *3. Dynamic Memory Management (see player.cpp)*
 
-specialized zombie variants: hulking brutes with reinforced cybernetics, agile ninjas who strike from the shadows, and grotesque bio-weapons spewing corrosive acid.
+    - Vectors used for zombie and coin positions automatically handle dynamic memory
 
-But The Rust is more than just a plague. It's a conspiracy that reaches the highest echelons of power. As you delve deeper into the city's underbelly, you'll uncover a 
+    - Efficient memory usage through proper data structure selection
 
-web of lies, betrayal, and corporate greed. You'll encounter allies and enemies, each with their own agenda. A mysterious hacker known only as "Zero" offers you cryptic
+- *4. File Input/Output (see terminal.cpp)*
 
-clues and technological support. A ruthless corporate executive, obsessed with controlling The Rust for his own gain, becomes your primary target. And a former comrade,
+    - Terminal state management for real-time input handling
 
-now twisted by the plague, stands as a formidable obstacle in your path.
+    - Game state preserved during gameplay sessions
 
-Your journey will be one of self-discovery and redemption. Haunted by the ghosts of your past, you'll confront your inner demons and make difficult choices that will 
+- *5. Program Codes in Multiple Files*
 
-determine the fate of Neo-Kyoto. Will you succumb to the darkness and become another monster, or will you rise as the city's unlikely savior?
+    - Clean separation of concerns across:
 
-The fate of Neo-Kyoto rests in your hands. Sharpen your katana, load your railgun, and prepare to paint the city red with the blood of the undead. The Rust awaits.
+      - Core game logic (game.cpp/h)
 
-In this game, you will be spawned at a map and there are many zombie located around you. You need to kill all the zombie on the map to win the game.
+      - Player mechanics (player.cpp/h)
 
-On the map, there are some citizens located around the map, you need save all the citizens from the zombie before you kill all the zombies, otherise, you mark maybe 
+      - Map generation (map.cpp/h)
 
-deducted!
+      - Terminal handling (terminal.cpp/h)
 
-Also, around the map, there are many coins randomly dropped. You can collect those coins around the map while killing zombies to upgrade your weapon!
+      - Main entry point (main.cpp)
 
-Some rocks also located on the map, the location that spwaned with rocks are not allowed to pass by.
+    - Architecture:
+    ```bash 
+        src/
+        ├── Makefile       # For code compilation
+        ├── README.md      # This file
+        ├── game.cpp/h     # Core game logic
+        ├── player.cpp/h   # Player mechanics
+        ├── map.cpp/h      # Map generation
+        ├── terminal.cpp/h # Terminal handling
+        └── main.cpp       # Entry point
 
-Your ultimate goal is to pass many level as you can. For sure, you may challenge a harder level when you already mastered the easier level.
+- *6. Multiple Difficulty Levels (see game.cpp)*
 
-Survive as long as possible, protect the citizens, become a zombie slayer!
+   - Three distinct levels:
+  
+      | Difficulty | Health | Armor | Range | Items available |
+      |------------|--------|-------|-------|-------|
+      | Easy       | 100    | 50    | 4     | Yes   |
+      | Normal     | 80     | 30    | 3     | Yes   |
+      | Hard       | 60     | 0     | 3     | No    |
 
+      > Hard: Only for true zombie slayers!
 
-## Special game feature of this game
+## Non-Standard Libraries
+This game uses only standard C++ libraries 
 
-- **Intense combat**
+- no external dependencies required!
 
-    - Shoot the zombies before they reach you and hurt you!
- 
-- **Earn and spend coins**
-
-    - Pick up coins on the map while killing zombie and use coins to upgrade your weapons!
-      
-- **Save Citizens**
-
-    - You not only need to shoot zombies, you also need to save citizens in the map from zombie at the same time！
-
-- **Progressive difficulty**
-
-    - If you feel that you are advanced enough in shooting zombies, you can choose to face a wave of stronger zombies!
-   
-## Non-standard libraries 🗂️
-
-Not used, standard libraries only.
-
-# File discription
-
-## game.cpp
-
-- For core game function, e.g. gameloop() function
-
-## game.h
-
--Declare game constants, game symbols, player structure and game state
-
-## main.cpp
-
--Main game loop and entry point
-
-## map.cpp
-
--Include function of generating map, clear map. Also place player, coins and zombies functiona.
-
-## map.h
-
--Include map related structures and functions
-
-## player.cpp
-
--Player implementation. Include move player and move zombies functions
-
-## player.h
-
--Player-related structures and functions
