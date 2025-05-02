@@ -1,6 +1,6 @@
 # COMP2113_Group43 - Zombie Rush
 
-![Game Title screen](/img.jpg)
+![WhatsApp Image 2025-05-02 at 22 43 48_1f132676](https://github.com/user-attachments/assets/742e527f-63f5-40aa-8e77-18144c782c6b)
 
 ## Team Members
 - [Choi Tsz Yin (3036259176)](https://github.com/RicoCTY)
