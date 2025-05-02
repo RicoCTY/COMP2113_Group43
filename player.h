@@ -14,6 +14,5 @@ void movePlayer(GameState& state, Player& player, char input);
 void moveZombies(GameState& state, Player& player);
 
 void shootBullet(GameState& state, Player& player);
-void meleeAttack(GameState& state, Player& player);
 
 #endif

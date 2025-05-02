@@ -60,9 +60,6 @@ void gameLoop() {
                 case 'e': // Shoot bullet
                     shootBullet(state, player);
                     break;
-                case 'r': // Melee attack
-                    meleeAttack(state, player);
-                    break;
                 case 'q':
                     state.gameOver = true;
                     break;

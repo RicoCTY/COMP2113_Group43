@@ -159,50 +159,6 @@ void shootBullet(GameState& state, Player& player) {
     }
 }
 
-void meleeAttack(GameState& state, Player& player) {
-    // Check adjacent cells based on facing direction
-    int checkX = player.x, checkY = player.y;
-    switch (player.facing) {
-        case DIR_UP: checkY--; break;
-        case DIR_DOWN: checkY++; break;
-        case DIR_LEFT: checkX--; break;
-        case DIR_RIGHT: checkX++; break;
-        case DIR_NONE: return;
-    }
-
-    // Check if zombie is in front
-    if (checkX > 0 && checkX < MAP_WIDTH-1 && checkY > 0 && checkY < MAP_HEIGHT-1) {
-        if (state.map[checkY][checkX] == ZOMBIE) {
-            auto it = find(state.zombie.begin(), state.zombie.end(), make_pair(checkX, checkY));
-            if (it != state.zombie.end()) {
-                state.zombie.erase(it);
-                state.map[checkY][checkX] = EMPTY;
-                player.money += 20;
-                state.zombiesRemaining--;
-                
-                // Check wave completion
-                if (state.zombiesRemaining <= 0) {
-                    state.currentWave++;
-                    if (state.currentWave <= MAX_WAVES) {
-                        state.zombiesRemaining = INITIAL_ZOMBIES + (state.currentWave - 1) * ZOMBIE_INCREMENT;
-                        // Spawn new zombies
-                        for (int i = 0; i < state.zombiesRemaining; i++) {
-                            int zx, zy;
-                            do {
-                                zx = rand() % (MAP_WIDTH - 2) + 1;
-                                zy = rand() % (MAP_HEIGHT - 2) + 1;
-                            } while (state.map[zy][zx] != EMPTY);
-                            state.zombie.push_back({zx, zy});
-                            state.map[zy][zx] = ZOMBIE;
-                        }
-                    }
-                }
-                spawnRandomItem(state, true);
-            }
-        }
-    }
-}
-
 // Modify movePlayer to update facing direction
 void movePlayer(GameState& state, Player& player, char input) {
     // Update facing direction

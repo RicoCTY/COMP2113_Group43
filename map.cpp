@@ -63,8 +63,8 @@ void drawGame(const GameState& state, const Player& player) {
                     player.facing == DIR_UP || player.facing == DIR_DOWN) {
                     // Show directional symbol only if player has moved
                     switch (player.facing) {
-                        case DIR_UP: cout << "//@\\\\ "; x += 2; break;
-                        case DIR_DOWN: cout << "\\\\@// "; x += 2; break;
+                        case DIR_UP: cout << "/@\\ "; x += 1; break;
+                        case DIR_DOWN: cout << "\\@/ "; x += 1; break;
                         case DIR_LEFT: cout << "<@"; x += 0; break;
                         case DIR_RIGHT: cout << "@>"; x += 0; break;
                         case DIR_NONE: cout << "@ "; break;
@@ -91,6 +91,6 @@ void drawGame(const GameState& state, const Player& player) {
     cout << " | Wave: " << state.currentWave << "/" << MAX_WAVES;
     cout << " | Zombies: " << state.zombiesRemaining;
     
-    cout << "\n\nControls: WASD to move, E to shoot, R to melee, Q to quit" << endl;
-    cout << "\nStore items: H(Health $10) A(Armor $15) R(Range $20)";
+    cout << "\n\nControls: WASD to move, E to shoot, Q to quit" << endl;
+    cout << "\nStore items: H(Health $10) A(Armor $15) R(Range $20)" << endl;
 }
