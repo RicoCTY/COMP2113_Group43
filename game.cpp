@@ -35,23 +35,21 @@ void gameLoop() {
     
     Difficulty difficulty = selectDifficulty();
     Player player = initializePlayer(difficulty);
+    player.facing = DIR_RIGHT; // Default facing direction
     GameState state;
     initializeGameState(state, player);
     
-    // For controlling zombie speed
     auto lastZombieMove = chrono::steady_clock::now();
-    const chrono::milliseconds zombieMoveInterval(500); // Zombies move every 500ms
+    const chrono::milliseconds zombieMoveInterval(500);
     
     while (!state.gameOver) {
         drawGame(state, player);
 
-        // Check if player won all waves
         if (state.currentWave > MAX_WAVES) {
             cout << "\n\nCONGRATULATIONS! You survived all waves!\n";
             break;
         }
         
-        // Handle player input
         if (kbhit()) {
             char input = getch();
             input = tolower(input);
@@ -60,20 +58,25 @@ void gameLoop() {
                 case 'w': case 'a': case 's': case 'd':
                     movePlayer(state, player, input);
                     break;
+                case 'e': // Shoot bullet
+                    shootBullet(state, player);
+                    break;
+                case 'r': // Melee attack
+                    meleeAttack(state, player);
+                    break;
                 case 'q':
                     state.gameOver = true;
                     break;
             }
         }
         
-        // Move zombies at controlled speed
         auto now = chrono::steady_clock::now();
         if (now - lastZombieMove >= zombieMoveInterval) {
             moveZombies(state, player);
             lastZombieMove = now;
         }
         
-        usleep(10000); // Small delay to prevent CPU overuse (10ms)
+        usleep(10000);
         
         if (player.health <= 0) {
             state.gameOver = true;

@@ -58,21 +58,42 @@ void drawGame(const GameState& state, const Player& player) {
     // Draw map
     for (int y = 0; y < MAP_HEIGHT; y++) {
         for (int x = 0; x < MAP_WIDTH; x++) {
-            cout << state.map[y][x] << " ";
+            if (x == player.x && y == player.y) {
+                switch (player.facing) {
+                    case DIR_UP: 
+                        cout << "/@\\";
+                        x += 2; // Skip next two positions
+                        break;
+                    case DIR_DOWN: 
+                        cout << "\\@/";
+                        x += 2; // Skip next two positions
+                        break;
+                    case DIR_LEFT: 
+                        cout << "<@";
+                        x += 1; // Skip next position
+                        break;
+                    case DIR_RIGHT: 
+                        cout << "@>";
+                        x += 1; // Skip next position
+                        break;
+                }
+            } else {
+                cout << state.map[y][x];
+                if (x < MAP_WIDTH - 1) {
+                    cout << " ";
+                }
+            }
         }
         cout << endl;
     }
     
-    // Draw stats
     cout << " | Health: " << player.health << "/" << player.maxHealth;
     cout << " | Armor: " << player.armor << "/" << player.maxArmor;
     cout << " | Range: " << player.attackRange;
     cout << " | Money: $" << player.money;
-
-    // Add wave information
     cout << " | Wave: " << state.currentWave << "/" << MAX_WAVES;
     cout << " | Zombies: " << state.zombiesRemaining;
     
-    cout << "\n\nControls: WASD to move, Q to quit" << endl;
+    cout << "\n\nControls: WASD to move, E to shoot, R to melee, Q to quit" << endl;
     cout << "\nStore items: H(Health $10) A(Armor $15) R(Range $20)";
 }

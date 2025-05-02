@@ -37,6 +37,13 @@ const int MAX_WAVES = 10;
 const int INITIAL_ZOMBIES = 1;
 const int ZOMBIE_INCREMENT = 1;  // Each wave adds this many zombies
 
+enum FacingDirection {
+    DIR_UP,
+    DIR_DOWN,
+    DIR_LEFT,
+    DIR_RIGHT
+};
+
 // Player structure
 struct Player {
     int x, y;
@@ -47,6 +54,7 @@ struct Player {
     int maxArmor;
     int attackRange;
     Difficulty difficulty;
+    FacingDirection facing;
 };
 
 // Game state
