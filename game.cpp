@@ -123,7 +123,7 @@ void gameLoop() {
                     shootBullet(state, player);
                     break;
                 case 'q': {
-                    bool shouldQuit = showQuitConfirmation();
+                    bool shouldQuit = showQuitConfirmation(true);
                     if (shouldQuit) {
                         state.gameOver = true;
                         exit(0); // Exit game completely
@@ -148,7 +148,7 @@ void gameLoop() {
     }
 }
 
-bool showQuitConfirmation() {
+bool showQuitConfirmation(bool inGame) {
     int selection = 1; // Default to "Return to Main Menu"
     char input;
     
@@ -157,9 +157,12 @@ bool showQuitConfirmation() {
         cout << COLOR_BOLD << COLOR_RED << "QUIT GAME?\n" << COLOR_RESET;
         cout << COLOR_YELLOW << "Are you sure you want to quit?\n\n" << COLOR_RESET;
         
-        // Option 1
-        if (selection == 1) cout << COLOR_GREEN << "> 1. Return to The Game\n" << endl;
-        else cout << COLOR_RESET << "  1. Return to The Game\n" << endl;;
+        // Option 1 - Change text based on context
+        if (selection == 1) {
+            cout << COLOR_GREEN << "> 1. " << (inGame ? "Return to The Game" : "Return to Title Screen") << "\n" << endl;
+        } else {
+            cout << COLOR_RESET << "  1. " << (inGame ? "Return to The Game" : "Return to Title Screen") << "\n" << endl;
+        }
         
         // Option 2
         if (selection == 2) cout << COLOR_RED << "> 2. Quit Game\n";
@@ -179,7 +182,7 @@ bool showQuitConfirmation() {
                 break;
             case '\n':  // Enter key
             case '\r':
-                return (selection == 2); // true if quit game, false if return to menu
+                return (selection == 2); // true if quit game, false if return
             case 'q':    // Allow q to cancel
                 return false;
             default:

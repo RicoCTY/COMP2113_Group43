@@ -34,14 +34,25 @@ void showTitleScreen() {
     cout << COLOR_MAGENTA << ARMOR_ITEM << COLOR_RESET << " - Armor upgrade ($15)\n";
     cout << COLOR_CYAN << RANGE_ITEM << COLOR_RESET << " - Range upgrade ($20)\n\n";
     
-    cout << COLOR_YELLOW << "Press any key to continue..." << COLOR_RESET;
-    getch();
+    cout << COLOR_YELLOW << "Press any key to continue or Q to quit..." << COLOR_RESET;
 }
 
 int main() {
     bool running = true;
     while (running) {
         showTitleScreen();
+        char input = getch();
+        input = tolower(input);
+        
+        if (input == 'q') {
+            bool shouldQuit = showQuitConfirmation(false);
+            if (shouldQuit) {
+                running = false;
+                continue;
+            }
+            continue;
+        }
+        
         gameLoop();
     }
     return 0;

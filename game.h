@@ -70,7 +70,7 @@ struct GameState {
 
 // Function declarations
 void initializeGameState(GameState& state, Player& player);
-bool showQuitConfirmation();
+bool showQuitConfirmation(bool inGame);
 void gameLoop();
 
 #endif
