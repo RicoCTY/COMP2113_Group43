@@ -47,7 +47,7 @@ make clean
 
 ## Features Implemented
 
-### **1. Generation of Random Events (see map.cpp, player.cpp)** ### 😝
+### **1. Generation of Random Events (see map.cpp, player.cpp)** 😝
 
    - Zombies spawn in random locations each wave
 
@@ -61,7 +61,7 @@ make clean
 
    - Walls are procedurally generated in different configurations (Straight or horizontal)
 
-### **2. Data Structures For Storing Data (see game.h, player.h)** ### 📜
+### **2. Data Structures For Storing Data (see game.h, player.h)**  📜
 
    - Player struct stores all character stats (health, armor, money, position)
 
@@ -75,19 +75,19 @@ make clean
 
       - Wave progression
 
-### **3. Dynamic Memory Management (see player.cpp)** ### 🔍
+### **3. Dynamic Memory Management (see player.cpp)** 🔍
 
    - Vectors used for zombie and coin positions automatically handle dynamic memory
 
    - Efficient memory usage through proper data structure selection
 
-### **4. File Input/Output (see terminal.cpp)** ### 🗂️
+### **4. File Input/Output (see terminal.cpp)**  🗂️
 
    - Terminal state management for real-time input handling
 
    - Game state preserved during gameplay sessions
 
-### **5. Program Codes in Multiple Files** ### 📚
+### **5. Program Codes in Multiple Files** 📚
 
    - Clean separation of concerns across:
 
@@ -113,7 +113,7 @@ make clean
        └── main.cpp       # Entry point
    ```
 
-### **6. Multiple Difficulty Levels (see game.cpp)** 📈
+### **6. Multiple Difficulty Levels (see game.cpp)  📈
 
   - Three distinct levels:
       | Difficulty | Health | Armor | Range | Items available |
@@ -124,7 +124,7 @@ make clean
 
      > Hard: Only for true zombie slayers!
 
-## Non-Standard Libraries 📗
+## Non-Standard Libraries  📗
 This game uses only standard C++ libraries
 
 - no external dependencies required!
