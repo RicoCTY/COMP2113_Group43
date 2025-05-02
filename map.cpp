@@ -58,6 +58,7 @@ void drawGame(const GameState& state, const Player& player) {
     for (int y = 0; y < MAP_HEIGHT; y++) {
         for (int x = 0; x < MAP_WIDTH; x++) {
             if (x == player.x && y == player.y) {
+                cout << COLOR_GREEN << COLOR_BOLD;
                 // Default: Just show '@' if no facing direction
                 if (player.facing == DIR_RIGHT || player.facing == DIR_LEFT || 
                     player.facing == DIR_UP || player.facing == DIR_DOWN) {
@@ -67,30 +68,73 @@ void drawGame(const GameState& state, const Player& player) {
                         case DIR_DOWN: cout << "\\@/ "; x += 1; break;
                         case DIR_LEFT: cout << "<@"; x += 0; break;
                         case DIR_RIGHT: cout << "@>"; x += 0; break;
-                        case DIR_NONE: cout << "@ "; break;
+                        case DIR_NONE: cout << "@  "; break;
                     }
-                } else {
-                    // Default: Just '@' (no facing direction)
-                    cout << "@ ";
                 }
+                else {
+                    cout << "@ "; // Default player symbol
+                }
+                cout << COLOR_RESET;
                 continue; // Skip adding space after player
             }
             
-            // Normal map rendering
-            cout << state.map[y][x];
+            char c = state.map[y][x];
+            switch(c) {
+                case WALL: cout << COLOR_WHITE << c << COLOR_RESET; break;
+                case COIN: cout << COLOR_YELLOW << c << COLOR_RESET; break;
+                case ZOMBIE: cout << COLOR_RED << c << COLOR_RESET; break;
+                case HEALTH_ITEM: cout << COLOR_BLUE << c << COLOR_RESET; break;
+                case ARMOR_ITEM: cout << COLOR_MAGENTA << c << COLOR_RESET; break;
+                case RANGE_ITEM: cout << COLOR_CYAN << c << COLOR_RESET; break;
+                default: cout << c; break;
+            }
             if (x < MAP_WIDTH - 1) cout << " ";
         }
         cout << endl;
     }
     
-    // Display player stats
-    cout << " | Health: " << player.health << "/" << player.maxHealth;
-    cout << " | Armor: " << player.armor << "/" << player.maxArmor;
-    cout << " | Range: " << player.attackRange;
-    cout << " | Money: $" << player.money;
-    cout << " | Wave: " << state.currentWave << "/" << MAX_WAVES;
-    cout << " | Zombies: " << state.zombiesRemaining;
+    cout << COLOR_CYAN << "\n╔══════════════════════════════════════════════════╗\n";
+    cout << "║ " << COLOR_BOLD << "STATUS" << COLOR_RESET << COLOR_CYAN << "                                           ║\n";
+    cout << "╠══════════════════════════════════════════════════╣\n";
     
-    cout << "\n\nControls: WASD to move, E to shoot, Q to quit" << endl;
-    cout << "\nItems: H(Health $10) A(Armor $15) R(Range $20)" << endl;
+    // Health bar
+    cout << "║ " << COLOR_RED << "Health: " << COLOR_RESET;
+    int healthBars = (player.health * 20) / player.maxHealth;
+    for (int i = 0; i < 20; i++) {
+        cout << (i < healthBars ? "█" : " ");
+    }
+    cout << " " << player.health << "/" << player.maxHealth << COLOR_CYAN << "               ║\n";
+    
+    // Armor bar
+    if (player.maxArmor > 0) {
+        cout << "║ " << COLOR_MAGENTA << "Armor:  " << COLOR_RESET;
+        int armorBars = (player.armor * 20) / player.maxArmor;
+        for (int i = 0; i < 20; i++) {
+            cout << (i < armorBars ? "█" : " ");
+        }
+        cout << " " << player.armor << "/" << player.maxArmor << COLOR_CYAN << "               ║\n";
+    }
+    
+    cout << "║ " << COLOR_YELLOW << "Money: $" << player.money << COLOR_RESET;
+    cout << string(36 - to_string(player.money).length(), ' ') << COLOR_CYAN << "     ║\n";
+    
+    cout << "║ " << COLOR_GREEN << "Wave: " << state.currentWave << "/" << MAX_WAVES;
+    cout << "  Zombies: " << state.zombiesRemaining;
+    cout << string(18 - to_string(state.currentWave).length() - to_string(MAX_WAVES).length() - to_string(state.zombiesRemaining).length(), ' ');
+    cout << COLOR_CYAN << "             ║\n";
+    
+    cout << "║ " << COLOR_BLUE << "Range: " << player.attackRange;
+    cout << string(37 - to_string(player.attackRange).length(), ' ') << COLOR_CYAN << "     ║\n";
+    
+    cout << "╚══════════════════════════════════════════════════╝\n" << COLOR_RESET;
+    
+    cout << "\n" << COLOR_YELLOW << "Controls: " << COLOR_RESET;
+    cout << COLOR_GREEN << "WASD" << COLOR_RESET << " to move, ";
+    cout << COLOR_GREEN << "E" << COLOR_RESET << " to shoot, ";
+    cout << COLOR_GREEN << "Q" << COLOR_RESET << " to quit\n";
+    
+    cout << COLOR_YELLOW << "Store: " << COLOR_RESET;
+    cout << COLOR_BLUE << "H" << COLOR_RESET << "(Health $10) ";
+    cout << COLOR_MAGENTA << "A" << COLOR_RESET << "(Armor $15) ";
+    cout << COLOR_CYAN << "R" << COLOR_RESET << "(Range $20)\n";
 }
