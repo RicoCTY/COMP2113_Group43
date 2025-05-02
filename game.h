@@ -33,7 +33,7 @@ const char HEALTH_ITEM = 'H';
 const char ARMOR_ITEM = 'A';
 const char RANGE_ITEM = 'R';
 
-const int MAX_WAVES = 10;
+const int MAX_WAVES = 2;
 const int INITIAL_ZOMBIES = 1;
 const int ZOMBIE_INCREMENT = 1;  // Each wave adds this many zombies
 
@@ -70,6 +70,7 @@ struct GameState {
 
 // Function declarations
 void initializeGameState(GameState& state, Player& player);
+bool showQuitConfirmation();
 void gameLoop();
 
 #endif

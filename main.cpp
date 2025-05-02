@@ -39,7 +39,10 @@ void showTitleScreen() {
 }
 
 int main() {
-    showTitleScreen();
-    gameLoop();
+    bool running = true;
+    while (running) {
+        showTitleScreen();
+        gameLoop();
+    }
     return 0;
 }
