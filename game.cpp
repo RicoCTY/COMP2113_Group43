@@ -14,18 +14,49 @@
 using namespace std;
 
 Difficulty selectDifficulty() {
-    clearScreen();
-    cout << "Select difficulty:\n";
-    cout << "1. Easy (100HP, 50 armor, range 3)\n"; 
-    cout << "2. Normal (80HP, 30 armor, range 2)\n";
-    cout << "3. Hard (60HP, 0 armor, range 1)\n";
-    cout << "====================\n";
-    cout << "Enter choice (1-3): ";
+    int selection = 1; // Default to Easy (option 1)
+    char input;
     
-    while(true) {
-        char input = getch();
-        if(input >= '1' && input <= '3') {
-            return static_cast<Difficulty>(input - '1');
+    while (true) {
+        clearScreen();   
+        cout << COLOR_BOLD << "SELECT DIFFICULTY:\n" << COLOR_RESET;
+        
+        // Option 1
+        if (selection == 1) cout << COLOR_GREEN << "> 1. Easy ";
+        else cout << "  1. Easy ";
+        cout << COLOR_RESET << "(100HP, 50 armor, range 4)\n";
+        
+        // Option 2
+        if (selection == 2) cout << COLOR_YELLOW << "> 2. Normal ";
+        else cout << "  2. Normal ";
+        cout << COLOR_RESET << "(80HP, 30 armor, range 3)\n";
+        
+        // Option 3
+        if (selection == 3) cout << COLOR_RED << "> 3. Hard ";
+        else cout << "  3. Hard ";
+        cout << COLOR_RESET << "(60HP, 0 armor, range 2)\n";
+        
+        cout << COLOR_CYAN << "\nUse 1-3 to select, ENTER to confirm\n";
+        cout << "====================\n" << COLOR_RESET;
+        
+        input = getch();
+        
+        // Only process valid inputs
+        switch(input) {
+            case '1':
+                selection = 1;
+                break;
+            case '2':
+                selection = 2;
+                break;
+            case '3':
+                selection = 3;
+                break;
+            case '\n':  // Enter key
+            case '\r':
+                return static_cast<Difficulty>(selection - 1);
+            default:
+                continue;
         }
     }
 }

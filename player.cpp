@@ -38,7 +38,7 @@ Player initializePlayer(Difficulty difficulty) {
             p.health = 60;
             p.maxHealth = 60;
             p.armor = 0;
-            p.maxArmor = 0;
+            p.maxArmor = 10;
             p.attackRange = 2;
             break;
     }

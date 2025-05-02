@@ -92,6 +92,20 @@ void drawGame(const GameState& state, const Player& player) {
         }
         cout << endl;
     }
+
+    cout << COLOR_BOLD << COLOR_YELLOW << "\nMode: " << COLOR_RESET;
+    switch(player.difficulty) {
+        case EASY:
+            cout << COLOR_GREEN << "Easy" << COLOR_RESET;
+            break;
+        case NORMAL:
+            cout << COLOR_YELLOW << "Normal" << COLOR_RESET;
+            break;
+        case HARD:
+            cout << COLOR_RED << "Hard" << COLOR_RESET;
+            break;
+    }
+    cout << "\n";
     
     cout << COLOR_CYAN << "\n╔══════════════════════════════════════════════════╗\n";
     cout << "║ " << COLOR_BOLD << "STATUS" << COLOR_RESET << COLOR_CYAN << "                                           ║\n";
@@ -103,16 +117,29 @@ void drawGame(const GameState& state, const Player& player) {
     for (int i = 0; i < 20; i++) {
         cout << (i < healthBars ? "█" : " ");
     }
-    cout << " " << player.health << "/" << player.maxHealth << COLOR_CYAN << "               ║\n";
-    
+    if (player.maxHealth == 100 && player.health == 100) {
+        cout << " " << player.health << "/" << player.maxHealth << COLOR_CYAN << "             ║\n";
+    } 
+    else if (player.maxHealth == 100 && player.health < 100) {
+        cout << " " << player.health << "/" << player.maxHealth << COLOR_CYAN << "              ║\n";
+    } 
+    else {
+        cout << " " << player.health << "/" << player.maxHealth << COLOR_CYAN << "               ║\n";
+    }
+
     // Armor bar
-    if (player.maxArmor > 0) {
+    if (player.maxArmor >= 0) {
         cout << "║ " << COLOR_MAGENTA << "Armor:  " << COLOR_RESET;
         int armorBars = (player.armor * 20) / player.maxArmor;
         for (int i = 0; i < 20; i++) {
             cout << (i < armorBars ? "█" : " ");
         }
-        cout << " " << player.armor << "/" << player.maxArmor << COLOR_CYAN << "               ║\n";
+        if (player.maxArmor >= 10 && player.armor >= 10) {
+            cout << " " << player.armor << "/" << player.maxArmor << COLOR_CYAN << "               ║\n";
+        } 
+        else if (player.maxArmor >= 10 && player.armor == 0) {
+            cout << " " << player.armor << "/" << player.maxArmor << COLOR_CYAN << "                ║\n";
+        }
     }
     
     cout << "║ " << COLOR_YELLOW << "Money: $" << player.money << COLOR_RESET;
@@ -127,14 +154,16 @@ void drawGame(const GameState& state, const Player& player) {
     cout << string(37 - to_string(player.attackRange).length(), ' ') << COLOR_CYAN << "     ║\n";
     
     cout << "╚══════════════════════════════════════════════════╝\n" << COLOR_RESET;
-    
+
     cout << "\n" << COLOR_YELLOW << "Controls: " << COLOR_RESET;
     cout << COLOR_GREEN << "WASD" << COLOR_RESET << " to move, ";
     cout << COLOR_GREEN << "E" << COLOR_RESET << " to shoot, ";
     cout << COLOR_GREEN << "Q" << COLOR_RESET << " to quit\n";
     
-    cout << COLOR_YELLOW << "Store: " << COLOR_RESET;
+    cout << COLOR_YELLOW << "Item: " << COLOR_RESET;
     cout << COLOR_BLUE << "H" << COLOR_RESET << "(Health $10) ";
     cout << COLOR_MAGENTA << "A" << COLOR_RESET << "(Armor $15) ";
     cout << COLOR_CYAN << "R" << COLOR_RESET << "(Range $20)\n";
+
+
 }
