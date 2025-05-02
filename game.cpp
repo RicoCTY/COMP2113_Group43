@@ -35,7 +35,7 @@ Difficulty selectDifficulty() {
         // Option 3
         if (selection == 3) cout << COLOR_RED << "> 3. Hard ";
         else cout << "  3. Hard ";
-        cout << COLOR_RESET << "   (60HP  |  0 armor | range 2)\n";
+        cout << COLOR_RESET << "   (60HP  |  0 armor | range 3 ; No Items Will Spawn)\n";
         
         cout << COLOR_CYAN << "\nUse 1-3 to select, ENTER to confirm\n" << COLOR_RESET;;
         cout << "====================\n";

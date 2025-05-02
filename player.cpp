@@ -40,7 +40,7 @@ Player initializePlayer(Difficulty difficulty) {
             p.maxHealth = 60;
             p.armor = 0;
             p.maxArmor = 10;
-            p.attackRange = 2;
+            p.attackRange = 3;
             break;
     }
     
@@ -198,41 +198,44 @@ void movePlayer(GameState& state, Player& player, char input) {
         
         if (target == WALL) return;
 
-        // Handle store items
-        if (target == HEALTH_ITEM) {
-            if (player.money >= 10 && player.health < player.maxHealth) {
-                player.money -= 10;
-                player.health = min(player.health + 10, player.maxHealth);
-                state.map[newY][newX] = EMPTY;
-            }
-            return;
-        }
-        if (target == ARMOR_ITEM) {
-            if (player.money >= 15 && player.armor < player.maxArmor) {
-                player.money -= 15;
-                player.armor = min(player.armor + 10, player.maxArmor);
-                state.map[newY][newX] = EMPTY;
-            }
-            return;
-        }
-        if (target == RANGE_ITEM) {
-            if (player.money >= 20 && player.attackRange < 8) {
-                player.money -= 20;
-                player.attackRange++;
-                state.map[newY][newX] = EMPTY;
-            }
-            return;
-        }
+        // Handle items - move this before the EMPTY/COIN check
+        if (target == HEALTH_ITEM || target == ARMOR_ITEM || target == RANGE_ITEM || target == COIN) {
+            // Move player to the item position first
+            state.map[player.y][player.x] = EMPTY;
+            player.x = newX;
+            player.y = newY;
+            state.map[player.y][player.x] = PLAYER;
 
-        if (target == COIN) {
-            auto it = find(state.coin.begin(), state.coin.end(), std::make_pair(newX, newY));
-            if (it != state.coin.end()) {
-                state.coin.erase(it);
-                player.money += 1;
+            // Then process the item
+            if (target == HEALTH_ITEM) {
+                if (player.money >= 10 && player.health < player.maxHealth) {
+                    player.money -= 10;
+                    player.health = min(player.health + 10, player.maxHealth);
+                }
             }
+            else if (target == ARMOR_ITEM) {
+                if (player.money >= 15 && player.armor < player.maxArmor) {
+                    player.money -= 15;
+                    player.armor = min(player.armor + 10, player.maxArmor);
+                }
+            }
+            else if (target == RANGE_ITEM) {
+                if (player.money >= 20 && player.attackRange < 8) {
+                    player.money -= 20;
+                    player.attackRange++;
+                }
+            }
+            else if (target == COIN) {
+                auto it = find(state.coin.begin(), state.coin.end(), std::make_pair(newX, newY));
+                if (it != state.coin.end()) {
+                    state.coin.erase(it);
+                    player.money += 1;
+                }
+            }
+            return;
         }
         
-        if (target == EMPTY || target == COIN) {
+        if (target == EMPTY) {
             state.map[player.y][player.x] = EMPTY;
             player.x = newX;
             player.y = newY;
