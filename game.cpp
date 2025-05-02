@@ -9,6 +9,7 @@
 #include <ctime>
 #include <unistd.h>
 #include <algorithm>
+#include <chrono>
 
 using namespace std;
 
@@ -37,6 +38,10 @@ void gameLoop() {
     GameState state;
     initializeGameState(state, player);
     
+    // For controlling zombie speed
+    auto lastZombieMove = chrono::steady_clock::now();
+    const chrono::milliseconds zombieMoveInterval(500); // Zombies move every 500ms
+    
     while (!state.gameOver) {
         drawGame(state, player);
 
@@ -46,25 +51,30 @@ void gameLoop() {
             break;
         }
         
-        char input;
+        // Handle player input
         if (kbhit()) {
-            input = getch();
+            char input = getch();
             input = tolower(input);
             
             switch (input) {
                 case 'w': case 'a': case 's': case 'd':
                     movePlayer(state, player, input);
-                    // Zombies move after player moves
-                    moveZombies(state, player);
                     break;
                 case 'q':
                     state.gameOver = true;
                     break;
             }
-        } else {
-            usleep(100000);
         }
-
+        
+        // Move zombies at controlled speed
+        auto now = chrono::steady_clock::now();
+        if (now - lastZombieMove >= zombieMoveInterval) {
+            moveZombies(state, player);
+            lastZombieMove = now;
+        }
+        
+        usleep(10000); // Small delay to prevent CPU overuse (10ms)
+        
         if (player.health <= 0) {
             state.gameOver = true;
         }
