@@ -22,7 +22,9 @@
 
 ### Quick DEMO
 
-https://drive.google.com/file/d/1A7skSvggePRmOMAEJOeDP2SuS30qjcDD/view?usp=drivesdk <==== Click me!
+[<img src="https://github.com/user-attachments/assets/59b46024-0a08-4138-b16c-57f71fe4329d" width="600" height="300">](https://drive.google.com/file/d/1A7skSvggePRmOMAEJOeDP2SuS30qjcDD/view?usp=drivesdk)
+
+[DEMO Video](https://drive.google.com/file/d/1A7skSvggePRmOMAEJOeDP2SuS30qjcDD/view?usp=drivesdk) <==== Click me!
 
 ### Running the Program 🏃
 To compile and run the game:
@@ -34,7 +36,7 @@ To clean up compiled files:
 ```bash
 make clean
 ```
-### Controls 📍
+### Controls 🕹️
 - `W` / `A` / `S` / `D` : **Move your character**
 
 - `E` : **Shoot in your facing direction**
@@ -113,7 +115,7 @@ make clean
        └── main.cpp       # Entry point
    ```
 
-### **6. Multiple Difficulty Levels (see game.cpp)  📈
+### **6. Multiple Difficulty Levels (see game.cpp)** 📈
 
   - Three distinct levels:
       | Difficulty | Health | Armor | Range | Items available |
