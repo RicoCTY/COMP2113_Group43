@@ -105,7 +105,7 @@ make clean
 
    #### Architecture: ####
    ```bash
-       src/
+       COMP2113_Group43/
        ├── Makefile       # For code compilation
        ├── README.md      # This file
        ├── game.cpp/h     # Core game logic
